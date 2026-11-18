@@ -1,10 +1,10 @@
 {
   "meta": {
     "project": "WIGO admin console",
-    "updated_at": "2026-11-18T20:55:00+05:30",
+    "updated_at": "2026-11-18T21:05:00+05:30",
     "updated_by": "Kunal",
     "register": "docs/FOLLOWUPS_AND_DEPENDENCIES.md and docs/ADMIN_MILESTONES.md, wigo-admin branch admin-design",
-    "register_as_of": "2026-11-16",
+    "register_as_of": "2026-11-18",
     "reviewed_by": null,
     "reviewed_on": null
   },
@@ -141,11 +141,11 @@
     {
       "id": "M16",
       "title": "Closing sweep and final pass",
-      "status": "not_started",
+      "status": "in_progress",
       "due": null,
       "evidence": null,
-      "updated_on": "2026-11-16",
-      "note": "Covers O12 to O29."
+      "updated_on": "2026-11-18",
+      "note": "Covers O12 to O29. O12 Rider 360 completion is built."
     }
   ],
   "items": [
@@ -290,11 +290,11 @@
       "title": "Rider 360 completion",
       "milestone": "M16",
       "type": "ours",
-      "status": "not_started",
+      "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": null,
-      "updated_on": "2026-11-16",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/03029b61e5275452cd1fc50d2dbec9a38b7b0b0d",
+      "updated_on": "2026-11-18",
       "gaps": "G5, G6, G7"
     },
     {
