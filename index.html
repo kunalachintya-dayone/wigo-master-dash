@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>WIGO Build Dashboard</title>
+  <meta name="description" content="What is built, what is still ours, and what is waiting on someone else.">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta name="theme-color" content="#0E0E0E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <img class="logo" src="/assets/wigo-logo.png" alt="WIGO" width="140" height="40">
+      <div class="topbar-meta">
+        <span class="topbar-title">Build dashboard</span>
+        <span class="updated" id="updated">Loading…</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="app" aria-live="polite">
+    <div class="loading">Loading data…</div>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Read-only. Every number is calculated from <code>data.json</code>. Built items need an evidence link, otherwise they show as in progress. Placeholder work is never counted as built.</p>
+    <p id="source"></p>
+  </footer>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

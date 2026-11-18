@@ -1,0 +1,12 @@
+{
+  "name": "wigo-build-dashboard",
+  "private": true,
+  "type": "module",
+  "description": "Read-only WIGO build dashboard. Reads data.json.",
+  "scripts": {
+    "check": "node scripts/check-data.mjs",
+    "test": "node --test test/*.test.js",
+    "dev": "node scripts/dev-server.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
