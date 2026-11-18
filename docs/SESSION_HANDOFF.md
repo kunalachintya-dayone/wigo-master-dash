@@ -28,8 +28,9 @@ One read-only page, shared with Eric and Kim, showing what is built, what is sti
 
 ## Hosting
 
-- Moving to the `dayone-ventures` Vercel team. The old project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`) in the "Kunal's projects" team still points at `latent-0/wigo-master-dash` and serves the first version at `wigo-build-dashboard.vercel.app`. Retire it once the new one is live.
-- The Vercel GitHub app must be installed on `kunalachintya-dayone` before Vercel can import the repo.
-- `GITHUB_TOKEN` (fine-grained, read-only Contents on wigo-admin and wigo-master-dash, owned by `kunalachintya-dayone`) must be added in Vercel. Never paste it in a chat.
-- Production branch is `claude/wizardly-goldberg-c1gcb7` (the repo default). Switching to `main` is recommended so daily `data.json` edits go to one obvious branch.
-- Turn off Vercel Authentication on the new project so the shared link opens without a login.
+- Vercel project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`) in the "Kunal's projects" team serves https://wigo-build-dashboard.vercel.app. It is the only Vercel team on the account, so the earlier plan to move to a `dayone-ventures` team is dropped unless that team is created.
+- Standard deployment protection: the production URL opens without a login; preview URLs need one.
+- The project is still linked to `latent-0/wigo-master-dash`, so pushes here do not redeploy. Production is updated by a direct file deploy of a commit on the default branch.
+- Last direct deploy: 18 Nov 2026, commit `e21a8d2`, deployment `dpl_2CeoPoUeN284Fymaaa7eJj7QzBbm`. Checked live: all ten views render with no console errors, `data.json` is current, `docs/` returns 404.
+- Still needed from the owner (cannot be done from a session): install the Vercel GitHub app on `kunalachintya-dayone` and reconnect the project's Git to `kunalachintya-dayone/wigo-master-dash`; add `GITHUB_TOKEN` (fine-grained, read-only Contents on wigo-admin and wigo-master-dash). Never paste it in a chat.
+- The production branch is `claude/wizardly-goldberg-c1gcb7`, the repo default. Renaming it to `main` is a GitHub settings change (Settings, Branches, rename default branch); do it before relinking Vercel so the production branch is set once.
