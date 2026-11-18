@@ -4,7 +4,7 @@ One read-only page that answers three questions in 30 seconds: what is built, wh
 
 - Plain HTML and JavaScript. No build step, no login, works on a phone.
 - Every number is calculated from `data.json`. Nothing on the page is typed by hand.
-- Seeded from the follow-ups register in `latent-0/wigo-admin`, branch `admin-design`: `docs/FOLLOWUPS_AND_DEPENDENCIES.md` (O and X items) and `docs/ADMIN_MILESTONES.md` (M1 to M16), as of 16 Nov 2026.
+- Seeded from the follow-ups register in `kunalachintya-dayone/wigo-admin`, branch `admin-design`: `docs/FOLLOWUPS_AND_DEPENDENCIES.md` (O and X items) and `docs/ADMIN_MILESTONES.md` (M1 to M16), as of 16 Nov 2026.
 
 ## Page sections
 

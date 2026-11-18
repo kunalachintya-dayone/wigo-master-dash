@@ -14,7 +14,7 @@
       "title": "Design system and shell",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/10ea8c99049ce09eb165cd95bba33ab8756e95d6",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/10ea8c99049ce09eb165cd95bba33ab8756e95d6",
       "updated_on": "2026-11-16"
     },
     {
@@ -22,7 +22,7 @@
       "title": "Auth: 2FA, lockout, sessions, admin users",
       "status": "in_progress",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/af9880cb038a6c37c59545f0db771cccba81c392",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/af9880cb038a6c37c59545f0db771cccba81c392",
       "updated_on": "2026-11-16",
       "note": "Mostly done. Open: A-25 session-expired sheet, access review screen (O13)."
     },
@@ -31,7 +31,7 @@
       "title": "Hub: analytics home, RBAC matrix, audit log, search, Rider 360, shutoff",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/f0c6b2e0b4265bbc0d2e0755717404fa06670052",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/f0c6b2e0b4265bbc0d2e0755717404fa06670052",
       "updated_on": "2026-11-16"
     },
     {
@@ -39,7 +39,7 @@
       "title": "Riders and Collections",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/a7e1564dd14cb155fab0e99d9ff5a6a981537fcc",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/a7e1564dd14cb155fab0e99d9ff5a6a981537fcc",
       "updated_on": "2026-11-16"
     },
     {
@@ -47,7 +47,7 @@
       "title": "Rentals",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/58da41991a11752e868e1374a25ce1b65c0f2b54",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/58da41991a11752e868e1374a25ce1b65c0f2b54",
       "updated_on": "2026-11-16"
     },
     {
@@ -55,7 +55,7 @@
       "title": "Vehicles and Packs",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/b4ac123d2de1db73ccc5a08f2840b359075a0f6d",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b4ac123d2de1db73ccc5a08f2840b359075a0f6d",
       "updated_on": "2026-11-16"
     },
     {
@@ -63,7 +63,7 @@
       "title": "Stations and Maintenance",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/54ef9ee35174c4b8adcb03228840a2746263444a",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/54ef9ee35174c4b8adcb03228840a2746263444a",
       "updated_on": "2026-11-16"
     },
     {
@@ -71,7 +71,7 @@
       "title": "Support and Comms",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/edd07ab303ae09ecb200b4ce2f29943cc8a9ed4e",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/edd07ab303ae09ecb200b4ce2f29943cc8a9ed4e",
       "updated_on": "2026-11-16"
     },
     {
@@ -79,7 +79,7 @@
       "title": "Finance",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/2ae32f9059bc3f802c5dfcfde6b036e6cec5832c",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/2ae32f9059bc3f802c5dfcfde6b036e6cec5832c",
       "updated_on": "2026-11-16"
     },
     {
@@ -87,7 +87,7 @@
       "title": "Risk and fraud",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/0e831ed4c8fb4e250290d485ac820236abfdff4c",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/0e831ed4c8fb4e250290d485ac820236abfdff4c",
       "updated_on": "2026-11-16"
     },
     {
@@ -95,7 +95,7 @@
       "title": "Alerts and Tasks",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/5614e781c961dcab32b190664c27cf63ffa876f0",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/5614e781c961dcab32b190664c27cf63ffa876f0",
       "updated_on": "2026-11-16"
     },
     {
@@ -103,7 +103,7 @@
       "title": "Workforce and field and depot app",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
       "updated_on": "2026-11-16"
     },
     {
@@ -111,7 +111,7 @@
       "title": "Incidents and Degraded Mode",
       "status": "built",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/87a279753cb426ab4e9e0c6adb937eed94b30a62",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/87a279753cb426ab4e9e0c6adb937eed94b30a62",
       "updated_on": "2026-11-16"
     },
     {
@@ -119,7 +119,7 @@
       "title": "Fleet Accounts, Fleet Map, Fleet Portal",
       "status": "in_progress",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
       "updated_on": "2026-11-16",
       "note": "Console side done. Fleet Portal waits on its design file (X14)."
     },
@@ -151,7 +151,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/be71e07b0d9680d9e03fa0f58f955354a948dc27",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/be71e07b0d9680d9e03fa0f58f955354a948dc27",
       "updated_on": "2026-11-16",
       "gaps": "G29, G35, G46"
     },
@@ -163,7 +163,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
       "updated_on": "2026-11-16",
       "gaps": "G7, G48",
       "note": "Real events come from cabinets and the rider app (X7)."
@@ -176,7 +176,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/dfe980541112ef4ba4631dfbcd7ae56b6e41dd14",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/dfe980541112ef4ba4631dfbcd7ae56b6e41dd14",
       "updated_on": "2026-11-16",
       "gaps": "G12, G16, G19",
       "note": "Bucket and CDN account are X9."
@@ -189,7 +189,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/27e391e3911f855b5ef10af699903e47e948a5f4",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/27e391e3911f855b5ef10af699903e47e948a5f4",
       "updated_on": "2026-11-16"
     },
     {
@@ -200,7 +200,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
       "updated_on": "2026-11-16",
       "gaps": "G26, G28, G30, G43",
       "note": "Sends once templates are approved and a token exists (X3)."
@@ -213,7 +213,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/87a279753cb426ab4e9e0c6adb937eed94b30a62",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/87a279753cb426ab4e9e0c6adb937eed94b30a62",
       "updated_on": "2026-11-16",
       "gaps": "G14"
     },
@@ -225,7 +225,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/87a279753cb426ab4e9e0c6adb937eed94b30a62",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/87a279753cb426ab4e9e0c6adb937eed94b30a62",
       "updated_on": "2026-11-16"
     },
     {
@@ -262,7 +262,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
       "updated_on": "2026-11-16",
       "note": "Fleet Portal is separate (O29, X14)."
     },
@@ -274,7 +274,7 @@
       "status": "built",
       "owner": "Kunal",
       "due": null,
-      "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
+      "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
       "updated_on": "2026-11-16",
       "gaps": "G23, G47",
       "note": "Tile provider account is X10."
@@ -791,7 +791,7 @@
         {
           "title": "Payments port with fake and live n1co adapters (idempotent top-ups)",
           "status": "built",
-          "evidence": "https://github.com/latent-0/wigo-admin/commit/3e1b84605ddd04f5aa4c6dfdb4b801fa5de1bfc4",
+          "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/3e1b84605ddd04f5aa4c6dfdb4b801fa5de1bfc4",
           "note": "Live adapter switches on with N1CO_DRIVER=live once sandbox credentials arrive."
         },
         {
@@ -831,13 +831,13 @@
         {
           "title": "Console swap and position receivers",
           "status": "built",
-          "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+          "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
           "note": "O2, built in M12."
         },
         {
           "title": "Missing-heartbeat alerts in the console",
           "status": "built",
-          "evidence": "https://github.com/latent-0/wigo-admin/commit/5614e781c961dcab32b190664c27cf63ffa876f0",
+          "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/5614e781c961dcab32b190664c27cf63ffa876f0",
           "note": "Built in M11 Alerts and Tasks."
         },
         {
@@ -925,19 +925,19 @@
         {
           "title": "Bilingual template library with approval states",
           "status": "built",
-          "evidence": "https://github.com/latent-0/wigo-admin/commit/edd07ab303ae09ecb200b4ce2f29943cc8a9ed4e",
+          "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/edd07ab303ae09ecb200b4ce2f29943cc8a9ed4e",
           "note": "Built in M8 Support and Comms. Four business templates still need their approved names and languages confirmed."
         },
         {
           "title": "WhatsApp webhook: verification handshake and signed receiver",
           "status": "built",
-          "evidence": "https://github.com/latent-0/wigo-admin/commit/d10bdb4bcb24c1300062ebc8d3ef7bfc182579d2",
+          "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/d10bdb4bcb24c1300062ebc8d3ef7bfc182579d2",
           "note": "Meta delivers real webhooks only once the app is published and business-verified."
         },
         {
           "title": "Sender service (outbox)",
           "status": "built",
-          "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+          "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
           "note": "O5."
         },
         {
@@ -988,7 +988,7 @@
         "executed": 303,
         "passed": 303,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
         "note": "12 live-model tests skipped: they need a real model API key."
       },
       {
@@ -997,7 +997,7 @@
         "executed": 217,
         "passed": 217,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
       },
       {
         "area": "Finance, payments and collections",
@@ -1005,7 +1005,7 @@
         "executed": 147,
         "passed": 147,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
       },
       {
         "area": "Operations: stations, bikes, rentals, fleet",
@@ -1013,7 +1013,7 @@
         "executed": 208,
         "passed": 208,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
       },
       {
         "area": "Comms and support",
@@ -1021,7 +1021,7 @@
         "executed": 84,
         "passed": 84,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
       },
       {
         "area": "Auth, roles and platform",
@@ -1029,7 +1029,7 @@
         "executed": 62,
         "passed": 62,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
       },
       {
         "area": "Console web app",
@@ -1037,7 +1037,7 @@
         "executed": 23,
         "passed": 23,
         "updated_on": "2026-11-18",
-        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+        "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
       }
     ],
     "bugs": []
@@ -1048,9 +1048,9 @@
   },
   "github": {
     "repos": [
-      "latent-0/wigo-admin@admin-design",
-      "latent-0/wigo-admin@main",
-      "latent-0/wigo-master-dash"
+      "kunalachintya-dayone/wigo-admin@admin-design",
+      "kunalachintya-dayone/wigo-admin@main",
+      "kunalachintya-dayone/wigo-master-dash"
     ],
     "authors": {
       "latent-0": "Kunal",
