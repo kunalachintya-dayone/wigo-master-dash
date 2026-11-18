@@ -397,7 +397,7 @@ function renderTesting(v) {
     </div>
     <div class="card" style="margin-top:12px"><div class="table-wrap"><table class="stack">
       <thead><tr><th>Area</th><th>Written</th><th>Executed</th><th>Passed</th><th>Updated</th><th>Evidence</th></tr></thead>
-      <tbody>${suiteBody}</tbody></table></div></div>
+      <tbody>${suiteBody}</tbody></table></div>${v.testing.note ? `<div class="chart-note">${esc(v.testing.note)}</div>` : ''}</div>
     <div class="card" style="margin-top:12px"><h3 class="card-title">Open bugs</h3><div class="table-wrap"><table class="stack">
       <thead><tr><th>Bug</th><th>Severity</th><th>Owner</th><th>Open for</th><th>Link</th></tr></thead>
       <tbody>${bugBody}</tbody></table></div></div>
