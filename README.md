@@ -98,13 +98,17 @@ Opens on http://localhost:3000. Tests:
 npm test
 ```
 
-## Move to the company accounts
+## Hosting
 
-1. Create the repo under the WIGO or DayOne GitHub organisation and push this code to it (`git remote set-url origin <new-url>` then `git push -u origin main`).
-2. In the company Vercel account: Add New → Project → import that repo. Framework preset **Other**, no build command, no output directory.
-3. Add `GITHUB_TOKEN` (from a company-owned GitHub account) under Environment Variables, then redeploy.
-4. Turn off Vercel Authentication (Settings → Deployment Protection) so the one shared link opens without a login.
-5. Update the `github.repos` list in `data.json` to the new repo names, then hand the Vercel and GitHub credentials to Kim.
+The repo is `kunalachintya-dayone/wigo-master-dash`. The site is the Vercel project `wigo-build-dashboard` in the "Kunal's projects" team, at https://wigo-build-dashboard.vercel.app. Standard deployment protection is on, so the production URL opens without a login and preview URLs need one.
+
+The Vercel project is still linked to the old `latent-0/wigo-master-dash` address, so a push to this repo does not redeploy the site yet. To fix that once:
+
+1. Install the Vercel GitHub app on `kunalachintya-dayone` (https://github.com/apps/vercel) with access to this repo.
+2. In Vercel, open `wigo-build-dashboard`, go to Settings, then Git, and connect `kunalachintya-dayone/wigo-master-dash`. Set the production branch to the repo's default branch.
+3. Add `GITHUB_TOKEN` under Environment Variables (fine-grained, read-only Contents on `wigo-admin` and `wigo-master-dash`, owned by `kunalachintya-dayone`), then redeploy.
+
+Until then, production is updated by deploying the files directly. The last direct deploy is recorded in `docs/SESSION_HANDOFF.md`.
 
 ## Files
 
