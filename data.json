@@ -772,7 +772,7 @@
           "title": "Payment API documentation",
           "asked_on": "2026-10-12",
           "received_on": null,
-          "note": "Asked with the sandbox request in HANDOFF_RESPONSE.md. Confirm the date."
+          "note": "Fake adapter was built against n1co's public docs (HANDOFF.md). Confirm the date the full API docs were asked for."
         },
         {
           "title": "Sandbox credentials",
@@ -789,10 +789,10 @@
       ],
       "tracks": [
         {
-          "title": "Payments port against a fake adapter",
+          "title": "Payments port with fake and live n1co adapters (idempotent top-ups)",
           "status": "built",
-          "evidence": null,
-          "note": "Add the commit link to count as built."
+          "evidence": "https://github.com/latent-0/wigo-admin/commit/3e1b84605ddd04f5aa4c6dfdb4b801fa5de1bfc4",
+          "note": "Live adapter switches on with N1CO_DRIVER=live once sandbox credentials arrive."
         },
         {
           "title": "Joint testing in the n1co sandbox",
@@ -811,66 +811,93 @@
       ],
       "tracks": [
         {
-          "title": "HEXUP TCP protocol server, tested against a simulated cabinet",
+          "title": "HEXUP TCP protocol (66-page spec): login, heartbeat, reports, door-open commands",
           "status": "built",
           "evidence": null,
-          "note": "Add the commit link to count as built."
+          "note": "Built in the rider backend, not in wigo-admin. Add its commit link to count as built."
         },
         {
-          "title": "Authenticated swap and position receivers",
+          "title": "Real cabinet confirmation wired into the swap flow",
+          "status": "built",
+          "evidence": null,
+          "note": "Rider backend. A swap completes only after the cabinet confirms the door opened."
+        },
+        {
+          "title": "End-to-end test against a simulated cabinet over TCP (three runs)",
+          "status": "built",
+          "evidence": null,
+          "note": "Reported in the 17 Oct hardware response. Add the test run link."
+        },
+        {
+          "title": "Console swap and position receivers",
           "status": "built",
           "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
           "note": "O2, built in M12."
         },
         {
-          "title": "Cabinet heartbeat ingestion and uptime",
+          "title": "Missing-heartbeat alerts in the console",
+          "status": "built",
+          "evidence": "https://github.com/latent-0/wigo-admin/commit/5614e781c961dcab32b190664c27cf63ffa876f0",
+          "note": "Built in M11 Alerts and Tasks."
+        },
+        {
+          "title": "Cabinet heartbeat ingestion and uptime in the console",
           "status": "in_progress",
           "evidence": null,
           "note": "O8."
-        },
-        {
-          "title": "Station state machine and missing-heartbeat alerts",
-          "status": "built",
-          "evidence": null,
-          "note": "Add the commit link to count as built."
         },
         {
           "title": "Live test with one real cabinet",
           "status": "blocked",
           "evidence": null,
           "note": "Needs a real cabinet pointed at our server."
+        },
+        {
+          "title": "Motorcycle telemetry: GPS, lock and unlock, odometer",
+          "status": "blocked",
+          "evidence": null,
+          "note": "App side built; every reading is simulated until the bike hardware and protocol are known."
         }
       ],
       "asks": [
         {
           "title": "One real cabinet pointed at our server",
           "asked_on": "2026-10-17",
-          "received_on": null
+          "received_on": null,
+          "note": "Priority 1. A configuration change on the HEXUP side."
         },
         {
-          "title": "Heartbeat and fault code specification",
+          "title": "Confirm cabinet firmware matches spec 2.0.71 (V2)",
           "asked_on": "2026-10-17",
           "received_on": null
         },
         {
-          "title": "Bike odometer, location and geofence events",
+          "title": "Device and station registry: cabinet to station, slots and doors, pack to cabinet, 87 motorcycle IDs",
+          "asked_on": "2026-10-17",
+          "received_on": null,
+          "note": "Priority 2. Six cabinet serials are on file; only one has an address."
+        },
+        {
+          "title": "Appendix 4: semaphore and telemetry code table",
+          "asked_on": "2026-10-17",
+          "received_on": null,
+          "note": "Referenced in the spec but not received."
+        },
+        {
+          "title": "QR code sequence for scan-to-swap",
           "asked_on": "2026-10-17",
           "received_on": null
         },
         {
-          "title": "Serial-to-station mapping",
+          "title": "Motorcycle telemetry hardware and protocol (odometer, GPS, lock and unlock)",
           "asked_on": "2026-10-17",
           "received_on": null
         },
         {
-          "title": "Appendix 4",
+          "title": "Raw captured telemetry payloads",
           "asked_on": "2026-10-17",
-          "received_on": null
-        },
-        {
-          "title": "QR sequence",
-          "asked_on": "2026-10-17",
-          "received_on": null
+          "received_on": null,
+          "note": "Lower priority; a live cabinet gives the same."
         }
       ]
     },
@@ -898,8 +925,14 @@
         {
           "title": "Bilingual template library with approval states",
           "status": "built",
-          "evidence": null,
-          "note": "Add the commit link to count as built."
+          "evidence": "https://github.com/latent-0/wigo-admin/commit/edd07ab303ae09ecb200b4ce2f29943cc8a9ed4e",
+          "note": "Built in M8 Support and Comms. Four business templates still need their approved names and languages confirmed."
+        },
+        {
+          "title": "WhatsApp webhook: verification handshake and signed receiver",
+          "status": "built",
+          "evidence": "https://github.com/latent-0/wigo-admin/commit/d10bdb4bcb24c1300062ebc8d3ef7bfc182579d2",
+          "note": "Meta delivers real webhooks only once the app is published and business-verified."
         },
         {
           "title": "Sender service (outbox)",
@@ -947,8 +980,66 @@
     }
   ],
   "testing": {
-    "note": "One row per area. Counts come from the test run; link the run as evidence.",
-    "suites": [],
+    "note": "Automated test suite (vitest) on wigo-admin branch admin-design at commit b818e49, run 18 Nov 2026. Bugs are logged by hand.",
+    "suites": [
+      {
+        "area": "AI agent",
+        "written": 315,
+        "executed": 303,
+        "passed": 303,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4",
+        "note": "12 live-model tests skipped: they need a real model API key."
+      },
+      {
+        "area": "Rules, risk and shutoff",
+        "written": 217,
+        "executed": 217,
+        "passed": 217,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+      },
+      {
+        "area": "Finance, payments and collections",
+        "written": 147,
+        "executed": 147,
+        "passed": 147,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+      },
+      {
+        "area": "Operations: stations, bikes, rentals, fleet",
+        "written": 208,
+        "executed": 208,
+        "passed": 208,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+      },
+      {
+        "area": "Comms and support",
+        "written": 84,
+        "executed": 84,
+        "passed": 84,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+      },
+      {
+        "area": "Auth, roles and platform",
+        "written": 62,
+        "executed": 62,
+        "passed": 62,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+      },
+      {
+        "area": "Console web app",
+        "written": 23,
+        "executed": 23,
+        "passed": 23,
+        "updated_on": "2026-11-18",
+        "evidence": "https://github.com/latent-0/wigo-admin/commit/b818e49d99fc6e51f183126499ef7551261500b4"
+      }
+    ],
     "bugs": []
   },
   "waitlist": {
