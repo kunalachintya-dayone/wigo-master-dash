@@ -1,5 +1,5 @@
 // GET /api/commits
-// Commits per person per day for the last 7 days (India time), read from the GitHub API.
+// Commits per person per day and releases per person for the last 7 days (India time), read from the GitHub API.
 //
 // Configuration (Vercel project environment variables):
 //   GITHUB_TOKEN   required. A fine-grained token with read-only "Contents" access to the repos.
@@ -64,6 +64,39 @@ export function tally(commits, authors, days) {
   return { days, people };
 }
 
+/** Releases published inside the window, newest first, with the person who published them. */
+export function weeklyReleases(releases, authors, days) {
+  const first = days[0];
+  const out = [];
+  const seen = new Set();
+  for (const r of releases) {
+    if (!r || r.draft || seen.has(r.id ?? r.html_url)) continue;
+    seen.add(r.id ?? r.html_url);
+    const when = r.published_at || r.created_at;
+    if (!when || dayKey(new Date(when)) < first) continue;
+    out.push({
+      repo: r.repo,
+      tag: r.tag_name,
+      name: r.name || r.tag_name,
+      url: r.html_url,
+      published_at: when,
+      prerelease: !!r.prerelease,
+      person: personFor({ author: r.author }, authors),
+    });
+  }
+  return out.sort((a, b) => (a.published_at < b.published_at ? 1 : -1));
+}
+
+/** Weekly totals per person: commits and releases. */
+export function weekly(people, releases) {
+  const map = new Map(people.map((p) => [p.name, { name: p.name, commits: p.counts.reduce((a, b) => a + b, 0), releases: 0 }]));
+  for (const r of releases) {
+    if (!map.has(r.person)) map.set(r.person, { name: r.person, commits: 0, releases: 0 });
+    map.get(r.person).releases += 1;
+  }
+  return [...map.values()].sort((a, b) => b.commits + b.releases - (a.commits + a.releases));
+}
+
 async function readDataConfig(req) {
   try {
     const host = req.headers['x-forwarded-host'] || req.headers.host;
@@ -77,6 +110,20 @@ async function readDataConfig(req) {
   }
 }
 
+const ghHeaders = (token) => ({
+  authorization: `Bearer ${token}`,
+  accept: 'application/vnd.github+json',
+  'x-github-api-version': '2022-11-28',
+  'user-agent': 'wigo-build-dashboard',
+});
+
+async function fetchReleases(repo, token) {
+  const res = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=30`, { headers: ghHeaders(token) });
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(`${repo} releases: GitHub answered ${res.status}`);
+  return (await res.json()).map((r) => ({ ...r, repo }));
+}
+
 async function fetchCommits({ repo, branch }, since, token) {
   const out = [];
   for (let page = 1; page <= MAX_PAGES; page++) {
@@ -85,14 +132,7 @@ async function fetchCommits({ repo, branch }, since, token) {
     url.searchParams.set('per_page', '100');
     url.searchParams.set('page', String(page));
     if (branch) url.searchParams.set('sha', branch);
-    const res = await fetch(url, {
-      headers: {
-        authorization: `Bearer ${token}`,
-        accept: 'application/vnd.github+json',
-        'x-github-api-version': '2022-11-28',
-        'user-agent': 'wigo-build-dashboard',
-      },
-    });
+    const res = await fetch(url, { headers: ghHeaders(token) });
     if (!res.ok) throw new Error(`${repo}${branch ? '@' + branch : ''}: GitHub answered ${res.status}`);
     const batch = await res.json();
     out.push(...batch);
@@ -127,8 +167,21 @@ export default async function handler(req, res) {
   const days = lastDays(now);
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   try {
-    const lists = await Promise.all(repoSpecs.map((r) => fetchCommits(r, since, token)));
-    res.status(200).json({ configured: true, repos, generated_at: now.toISOString(), ...tally(lists.flat(), authors, days) });
+    const uniqueRepos = [...new Set(repoSpecs.map((r) => r.repo))];
+    const [lists, releaseLists] = await Promise.all([
+      Promise.all(repoSpecs.map((r) => fetchCommits(r, since, token))),
+      Promise.all(uniqueRepos.map((r) => fetchReleases(r, token))),
+    ]);
+    const counts = tally(lists.flat(), authors, days);
+    const releases = weeklyReleases(releaseLists.flat(), authors, days);
+    res.status(200).json({
+      configured: true,
+      repos,
+      generated_at: now.toISOString(),
+      ...counts,
+      releases,
+      weekly: weekly(counts.people, releases),
+    });
   } catch (err) {
     res.setHeader('cache-control', 'no-store');
     res.status(200).json({ configured: true, repos, error: String(err.message || err) });

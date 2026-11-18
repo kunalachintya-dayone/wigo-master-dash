@@ -729,6 +729,232 @@
       "asked_source": "Raised when M14 closed, 16 Nov."
     }
   ],
+  "team": [
+    {
+      "name": "Shiva",
+      "role": "Daily tracker update; rider app liaison (X7)",
+      "focus": null,
+      "update": null,
+      "updated_on": null
+    },
+    {
+      "name": "Kunal",
+      "role": "Admin console build",
+      "focus": null,
+      "update": null,
+      "updated_on": null
+    },
+    {
+      "name": "Sneha",
+      "role": null,
+      "focus": null,
+      "update": null,
+      "updated_on": null
+    },
+    {
+      "name": "Ajay",
+      "role": null,
+      "focus": null,
+      "update": null,
+      "updated_on": null
+    }
+  ],
+  "partners": [
+    {
+      "id": "n1co",
+      "name": "n1co",
+      "contact": "Wilber",
+      "items": [
+        "X1"
+      ],
+      "asks": [
+        {
+          "title": "Payment API documentation",
+          "asked_on": "2026-10-12",
+          "received_on": null,
+          "note": "Asked with the sandbox request in HANDOFF_RESPONSE.md. Confirm the date."
+        },
+        {
+          "title": "Sandbox credentials",
+          "asked_on": "2026-10-12",
+          "received_on": null,
+          "note": "First requested in HANDOFF_RESPONSE.md (12 Oct)."
+        },
+        {
+          "title": "Webhooks: event list, signing secret and endpoint registration",
+          "asked_on": "2026-10-12",
+          "received_on": null,
+          "note": "Covers chargeback events and the top-up attempt feed. Confirm the date."
+        }
+      ],
+      "tracks": [
+        {
+          "title": "Payments port against a fake adapter",
+          "status": "built",
+          "evidence": null,
+          "note": "Add the commit link to count as built."
+        },
+        {
+          "title": "Joint testing in the n1co sandbox",
+          "status": "not_started",
+          "evidence": null,
+          "note": "Starts when sandbox credentials and webhooks arrive."
+        }
+      ]
+    },
+    {
+      "id": "hexup",
+      "name": "Hexup",
+      "contact": "Hexup and hardware owners",
+      "items": [
+        "X8"
+      ],
+      "tracks": [
+        {
+          "title": "HEXUP TCP protocol server, tested against a simulated cabinet",
+          "status": "built",
+          "evidence": null,
+          "note": "Add the commit link to count as built."
+        },
+        {
+          "title": "Authenticated swap and position receivers",
+          "status": "built",
+          "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+          "note": "O2, built in M12."
+        },
+        {
+          "title": "Cabinet heartbeat ingestion and uptime",
+          "status": "in_progress",
+          "evidence": null,
+          "note": "O8."
+        },
+        {
+          "title": "Station state machine and missing-heartbeat alerts",
+          "status": "built",
+          "evidence": null,
+          "note": "Add the commit link to count as built."
+        },
+        {
+          "title": "Live test with one real cabinet",
+          "status": "blocked",
+          "evidence": null,
+          "note": "Needs a real cabinet pointed at our server."
+        }
+      ],
+      "asks": [
+        {
+          "title": "One real cabinet pointed at our server",
+          "asked_on": "2026-10-17",
+          "received_on": null
+        },
+        {
+          "title": "Heartbeat and fault code specification",
+          "asked_on": "2026-10-17",
+          "received_on": null
+        },
+        {
+          "title": "Bike odometer, location and geofence events",
+          "asked_on": "2026-10-17",
+          "received_on": null
+        },
+        {
+          "title": "Serial-to-station mapping",
+          "asked_on": "2026-10-17",
+          "received_on": null
+        },
+        {
+          "title": "Appendix 4",
+          "asked_on": "2026-10-17",
+          "received_on": null
+        },
+        {
+          "title": "QR sequence",
+          "asked_on": "2026-10-17",
+          "received_on": null
+        }
+      ]
+    },
+    {
+      "id": "meta",
+      "name": "Meta (WhatsApp Business)",
+      "contact": null,
+      "items": [
+        "X3"
+      ],
+      "asks": [
+        {
+          "title": "Template library approval",
+          "asked_on": "2026-11-15",
+          "received_on": null,
+          "note": "Reminders, past-due cadence, network suspended and restored, CSAT, escalation and digest, invite code, TOTP fallback."
+        },
+        {
+          "title": "WhatsApp Business API token",
+          "asked_on": "2026-11-15",
+          "received_on": null
+        }
+      ],
+      "tracks": [
+        {
+          "title": "Bilingual template library with approval states",
+          "status": "built",
+          "evidence": null,
+          "note": "Add the commit link to count as built."
+        },
+        {
+          "title": "Sender service (outbox)",
+          "status": "built",
+          "evidence": "https://github.com/latent-0/wigo-admin/commit/a8734708987ce688701c6e91aee91aa09e36f66d",
+          "note": "O5."
+        },
+        {
+          "title": "Template registration from the console",
+          "status": "not_started",
+          "evidence": null,
+          "note": "O23. Needs the token."
+        }
+      ]
+    },
+    {
+      "id": "designs",
+      "name": "Module designs",
+      "contact": "Eric (designer)",
+      "items": [
+        "X6"
+      ],
+      "asks": [
+        {
+          "title": "Energy",
+          "asked_on": "2026-11-15",
+          "received_on": null
+        },
+        {
+          "title": "Inventory",
+          "asked_on": "2026-11-15",
+          "received_on": null
+        },
+        {
+          "title": "Planning",
+          "asked_on": "2026-11-15",
+          "received_on": null
+        },
+        {
+          "title": "Data Platform",
+          "asked_on": "2026-11-15",
+          "received_on": null
+        }
+      ]
+    }
+  ],
+  "testing": {
+    "note": "One row per area. Counts come from the test run; link the run as evidence.",
+    "suites": [],
+    "bugs": []
+  },
+  "waitlist": {
+    "source": "Waitlist export from Eric and the rider app team (X7)",
+    "days": []
+  },
   "github": {
     "repos": [
       "latent-0/wigo-admin@admin-design",
