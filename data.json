@@ -987,6 +987,105 @@
   ],
   "testing": {
     "note": "Automated test suite (vitest) on wigo-admin branch admin-design at commit b818e49, run 18 Nov 2026. Bugs are logged by hand.",
+    "source": {
+      "repo": "kunalachintya-dayone/wigo-admin",
+      "branch": "test-results",
+      "path": "results/admin-design.json"
+    },
+    "areas": [
+      {
+        "area": "AI agent",
+        "match": [
+          "agent-*",
+          "llm-*",
+          "live-openrouter",
+          "vary"
+        ],
+        "note": "Skipped tests call a live AI model and need a real API key"
+      },
+      {
+        "area": "Rules, risk and shutoff",
+        "match": [
+          "v14-rules",
+          "owner-rules",
+          "risk",
+          "shutoff",
+          "marketing-limits"
+        ]
+      },
+      {
+        "area": "Finance, payments and collections",
+        "match": [
+          "approvals-finance",
+          "economics",
+          "recon-close",
+          "financials",
+          "collections",
+          "payments",
+          "rental-charges",
+          "referrals",
+          "spend-long",
+          "applications",
+          "pipeline",
+          "persistence"
+        ]
+      },
+      {
+        "area": "Operations: stations, bikes, rentals, fleet",
+        "match": [
+          "alerts",
+          "bikes",
+          "catalog-insurance",
+          "degraded",
+          "field",
+          "fleet",
+          "incidents",
+          "maintenance",
+          "packs",
+          "rentals",
+          "stations-locations",
+          "tasks",
+          "workforce",
+          "rider360",
+          "recovery"
+        ]
+      },
+      {
+        "area": "Comms and support",
+        "match": [
+          "campaigns",
+          "handoff-email",
+          "inbound",
+          "notifications",
+          "outbox",
+          "support",
+          "templates-comms",
+          "experiments"
+        ]
+      },
+      {
+        "area": "Auth, roles and platform",
+        "match": [
+          "auth",
+          "signin",
+          "rbac",
+          "roles",
+          "audit",
+          "bootstrap-admin",
+          "console",
+          "default-links",
+          "search",
+          "kpi",
+          "analytics"
+        ]
+      },
+      {
+        "area": "Console web app",
+        "match": [
+          "web/*"
+        ]
+      }
+    ],
     "suites": [
       {
         "area": "AI agent",

@@ -5,7 +5,8 @@ One read-only page that answers three questions in 30 seconds: what is built, wh
 - Plain HTML and JavaScript. No build step, no login, works on a phone.
 - Every number is calculated, never typed by hand.
 - **Live from wigo-admin.** Milestones (M1 to M16), our items (O#) and external items (X#) are read on every page load from `kunalachintya-dayone/wigo-admin`, branch `admin-design`: `docs/ADMIN_MILESTONES.md` and `docs/FOLLOWUPS_AND_DEPENDENCIES.md`. A milestone's evidence link is the commit that records or closes it ("record milestone 14", "Close milestone 12"). When that register changes, the page follows within 5 minutes, with no edit here.
-- **From `data.json`.** Everything the register does not hold: owners, ask dates, due dates, hand-written notes and evidence (which win over the live values), partner asks, team updates, testing and waitlist. It is also the saved copy the page falls back to if GitHub cannot be reached; a banner at the top says which source is showing.
+- **Test results, live.** wigo-admin's "Test results" workflow (`.github/workflows/test-results.yml`) runs the server and web suites on every push to `admin-design` and `main`, and daily, and writes one row per test file to `results/<branch>.json` on its `test-results` branch. The page groups those files into the areas in `testing.areas`.
+- **From `data.json`.** Everything the register does not hold: owners, ask dates, due dates, hand-written notes and evidence (which win over the live values), partner asks, team updates, bugs and waitlist. It is also the saved copy the page falls back to if GitHub cannot be reached; a banner at the top says which source is showing.
 
 ## Page sections
 
@@ -71,7 +72,9 @@ Built or not built comes from the wigo-admin register, so there is nothing to ch
 |---|---|---|
 | `team[]` | `name`, `role`, `focus`, `update`, `updated_on` | `focus` is an optional item id to show as the current task; otherwise the most active open item is shown. Set `update` and `updated_on` daily. |
 | `partners[]` | `id`, `name`, `contact`, `items`, `asks[]`, `tracks[]` | Ids `n1co`, `hexup`, `meta` and `designs` feed views 2 to 4. An ask has `title`, `asked_on`, `received_on`, `note`; set `received_on` the day it arrives. A track has `title`, `status`, `evidence`, `note` and follows the same evidence rule as items. |
-| `testing.suites[]` | `area`, `written`, `executed`, `passed`, `updated_on`, `evidence` | One row per area; link the test run. |
+| `testing.areas[]` | `area`, `match[]`, `note` | Groups live test files into areas. A pattern without `/` matches the file name without `.test.ts` (`agent-*`, `payments`); with `/` it matches the path (`web/*`). Files that match nothing show under **Other**, so add a pattern when a new test file appears. |
+| `testing.source` | `repo`, `branch`, `path` | Where the live results are read: `kunalachintya-dayone/wigo-admin`, `test-results`, `results/admin-design.json`. |
+| `testing.suites[]` | `area`, `written`, `executed`, `passed`, `updated_on`, `evidence` | Saved copy, shown only when live results cannot be read. |
 | `testing.bugs[]` | `id`, `title`, `status` (`open`/`closed`), `severity` (`critical`/`high`/`medium`/`low`), `owner`, `opened_on`, `closed_on`, `link` | |
 | `waitlist.days[]` | `date`, `size`, `converted` | One row per day from Eric's export. |
 

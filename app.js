@@ -1,5 +1,6 @@
 import { compute, displayStatus, parseDate, STATUS_LABEL, validate } from './lib/compute.js';
 import { mergeRegister } from './lib/register.js';
+import { mergeTesting } from './lib/tests.js';
 
 const VIEWS = [
   ['progress', 'Overall progress'],
@@ -133,9 +134,14 @@ function nav() {
 function renderLiveLine() {
   const live = state.live;
   if (live === undefined) return `<div class="banner info"><span>⟳</span><span>Checking wigo-admin for the latest register…</span></div>`;
+  const tests = state.tests;
+  const testsLive = !!(tests && tests.results && !tests.error);
+  const testsLine = testsLive
+    ? ` Test results are from the latest automated run${tests.results.run_url ? ` (<a href="${esc(tests.results.run_url)}" target="_blank" rel="noopener">run</a>)` : ''}.`
+    : ` Test results are the saved copy${tests && tests.error ? ` (${esc(tests.error)})` : ''}.`;
   if (live && live.source && !live.error) {
     const s = live.source;
-    return `<div class="banner ok"><span>●</span><span><b>Live from wigo-admin.</b> Milestones and items are read from <code>${esc(s.repo)}</code> branch <code>${esc(s.branch)}</code> at <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.short)}</a> (${esc(fmtStamp(s.date))}). Owners, ask dates, partners, team, testing and waitlist come from data.json.</span></div>`;
+    return `<div class="banner ok"><span>●</span><span><b>Live from wigo-admin.</b> Milestones and items are read from <code>${esc(s.repo)}</code> branch <code>${esc(s.branch)}</code> at <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.short)}</a> (${esc(fmtStamp(s.date))}).${testsLine} Owners, ask dates, partners, team, bugs and waitlist come from data.json.</span></div>`;
   }
   const why = !live ? 'could not be reached' : live.configured === false ? 'is not connected (no GITHUB_TOKEN)' : `failed: ${live.error}`;
   return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy.</b> The live register in wigo-admin ${esc(why)}, so milestones and items come from data.json.</span></div>`;
@@ -657,9 +663,13 @@ async function main() {
     fetch(url, { headers: { accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null);
-  const [live, commits] = await Promise.all([getJson('/api/register'), getJson('/api/commits')]);
+  const [live, commits, tests] = await Promise.all([getJson('/api/register'), getJson('/api/commits'), getJson('/api/tests')]);
   state.live = live;
-  if (live && live.source && !live.error) state.data = mergeRegister(state.base, live);
+  state.tests = tests;
+  let data = state.base;
+  if (live && live.source && !live.error) data = mergeRegister(data, live);
+  if (tests && tests.results && !tests.error) data = { ...data, testing: mergeTesting(data.testing, tests.results) };
+  state.data = data;
   state.commits = commits || { configured: false };
   render();
 }
