@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { compute, effective, validate, daysWaiting, isOverdue, parseDate } from '../lib/compute.js';
-import { tally, lastDays, parseRepo, personFor } from '../api/commits.js';
+import { compute, effective, validate, daysWaiting, isOverdue, parseDate, computeAsk, computeTeam, computeTesting, computeWaitlist, computePartners } from '../lib/compute.js';
+import { tally, lastDays, parseRepo, personFor, weeklyReleases, weekly } from '../api/commits.js';
 
 const NOW = parseDate('2026-11-18');
 const base = (o) => ({ id: 'O1', title: 't', type: 'ours', owner: 'Kunal', milestone: 'M1', status: 'built', evidence: 'https://github.com/a/b/commit/abc1234', ...o });
@@ -126,4 +126,114 @@ test('repo specs and author mapping', () => {
   assert.deepEqual(parseRepo('latent-0/wigo-admin@admin-design'), { repo: 'latent-0/wigo-admin', branch: 'admin-design' });
   assert.equal(parseRepo('not a repo'), null);
   assert.equal(personFor({ author: { login: 'LATENT-0' } }, { 'latent-0': 'Kunal' }), 'Kunal');
+});
+
+test('partner asks: days waiting until received, then time to arrive', () => {
+  const waiting = computeAsk({ title: 'Sandbox', asked_on: '2026-10-12' }, NOW);
+  assert.equal(waiting.received, false);
+  assert.equal(waiting.days_waiting, 37);
+  const got = computeAsk({ title: 'Docs', asked_on: '2026-10-12', received_on: '2026-10-20' }, NOW);
+  assert.equal(got.received, true);
+  assert.equal(got.days_waiting, null);
+  assert.equal(got.days_to_receive, 8);
+  const p = computePartners([{ id: 'n1co', asks: [{ title: 'a', asked_on: '2026-10-12' }, { title: 'b', asked_on: '2026-11-01', received_on: '2026-11-02' }], tracks: [{ title: 't', status: 'built' }] }], [], NOW).n1co;
+  assert.equal(p.waiting, 1);
+  assert.equal(p.received, 1);
+  assert.equal(p.longest, 37);
+  assert.equal(p.tracks[0].status, 'in_progress', 'built track without evidence is not built');
+});
+
+test('team task and status come from the tracker', () => {
+  const items = [
+    effective(base({ id: 'O1', owner: 'Kunal' })),
+    effective(base({ id: 'O2', owner: 'Kunal', status: 'not_started', evidence: null })),
+    effective(base({ id: 'O3', owner: 'Kunal', status: 'in_progress', evidence: null })),
+  ];
+  const [kunal, sneha] = computeTeam(
+    [{ name: 'Kunal', update: 'Shipped O1', updated_on: '2026-11-18' }, { name: 'Sneha', update: 'x', updated_on: '2026-11-16' }],
+    items,
+    NOW
+  );
+  assert.equal(kunal.task.id, 'O3', 'in progress beats not started');
+  assert.equal(kunal.items_open, 2);
+  assert.equal(kunal.update_today, true);
+  assert.equal(sneha.task, null);
+  assert.equal(sneha.update_today, false);
+  assert.equal(sneha.update_age, 2);
+  const [withFocus] = computeTeam([{ name: 'Kunal', focus: 'O2' }], items, NOW);
+  assert.equal(withFocus.task.id, 'O2');
+});
+
+test('testing totals are summed and clamped', () => {
+  const t = computeTesting({
+    suites: [
+      { area: 'Auth', written: 10, executed: 8, passed: 7 },
+      { area: 'Pay', written: 5, executed: 9, passed: 12 },
+    ],
+    bugs: [
+      { id: 'B1', status: 'open', severity: 'low', opened_on: '2026-11-10' },
+      { id: 'B2', status: 'open', severity: 'critical', opened_on: '2026-11-17' },
+      { id: 'B3', status: 'closed', severity: 'high' },
+    ],
+  }, NOW);
+  assert.deepEqual([t.totals.written, t.totals.executed, t.totals.passed, t.totals.failed], [15, 13, 12, 1]);
+  assert.equal(t.totals.bugsOpen, 2);
+  assert.equal(t.totals.bugsCritical, 1);
+  assert.equal(t.openBugs[0].id, 'B2', 'critical first');
+  assert.equal(t.openBugs[1].age, 8);
+});
+
+test('waitlist change is against the previous day', () => {
+  const w = computeWaitlist({ days: [
+    { date: '2026-11-18', size: 120, converted: 30 },
+    { date: '2026-11-17', size: 100, converted: 20 },
+  ] });
+  assert.equal(w.latest.date, '2026-11-18');
+  assert.equal(w.latest.size_change, 20);
+  assert.equal(w.latest.converted_change, 10);
+  assert.equal(w.latest.rate_change_pts, 5);
+  assert.equal(w.days[0].size_change, null);
+  assert.equal(computeWaitlist(undefined).latest, null);
+});
+
+test('dependencies split into Eric and third parties', () => {
+  const v = compute({ milestones: [], items: [
+    { id: 'X1', title: 'a', type: 'external', owner: 'Eric', status: 'blocked', asked_on: '2026-10-19' },
+    { id: 'X2', title: 'b', type: 'external', owner: 'n1co', status: 'blocked', asked_on: '2026-10-12' },
+    { id: 'X3', title: 'c', type: 'external', owner: 'Meta', status: 'blocked', asked_on: '2026-11-15' },
+  ] }, NOW);
+  const [eric, third] = v.dependencies;
+  assert.equal(eric.count, 1);
+  assert.equal(eric.longest, 30);
+  assert.equal(third.count, 2);
+  assert.equal(third.longest, 37);
+  assert.equal(third.over14, 1);
+  assert.equal(v.tracker.length, 3);
+});
+
+test('validate checks the new sections', () => {
+  const { errors } = validate({
+    milestones: [],
+    items: [],
+    team: [{ name: 'Bob' }, { name: 'Kunal', focus: 'O99' }],
+    partners: [{ id: 'n1co', items: ['X99'], asks: [{ title: 'a', asked_on: '2026-11-10', received_on: '2026-11-01' }], tracks: [{ title: 't', status: 'done' }] }],
+    testing: { suites: [{ area: 'A', written: 2, executed: 3, passed: 1 }], bugs: [{ id: 'B1', status: 'gone' }] },
+    waitlist: { days: [{ date: '2026-11-18', size: 5, converted: 9 }] },
+  });
+  const text = errors.join('\n');
+  for (const re of [/"Bob"/, /O99/, /X99/, /received before/, /status "done"/, /executed is more/, /bug B1/, /more than the waitlist/]) assert.match(text, re);
+});
+
+test('weekly releases and per-person totals', () => {
+  const days = lastDays(new Date('2026-11-18T10:00:00Z'));
+  const rel = weeklyReleases([
+    { id: 1, repo: 'a/b', tag_name: 'v1', html_url: 'https://x/1', published_at: '2026-11-17T10:00:00Z', author: { login: 'latent-0' } },
+    { id: 2, repo: 'a/b', tag_name: 'v0', html_url: 'https://x/0', published_at: '2026-10-01T10:00:00Z', author: { login: 'latent-0' } },
+    { id: 3, repo: 'a/b', tag_name: 'd', draft: true, published_at: null, author: { login: 'latent-0' } },
+  ], { 'latent-0': 'Kunal' }, days);
+  assert.equal(rel.length, 1);
+  assert.equal(rel[0].person, 'Kunal');
+  const w = weekly([{ name: 'Kunal', counts: [1, 0, 0, 0, 0, 0, 2] }], [...rel, { person: 'Shiva' }]);
+  assert.deepEqual(w.find((x) => x.name === 'Kunal'), { name: 'Kunal', commits: 3, releases: 1 });
+  assert.equal(w.find((x) => x.name === 'Shiva').releases, 1);
 });
