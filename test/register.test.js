@@ -142,3 +142,27 @@ test('merge: no live register leaves data.json untouched', () => {
   assert.equal(mergeRegister(BASE, null), BASE);
   assert.equal(mergeRegister(BASE, { milestones: [] }), BASE);
 });
+
+test('merge: a hand-set built with evidence, or an in-progress milestone, is kept while the register lags', () => {
+  const base = {
+    ...BASE,
+    milestones: [...BASE.milestones, { id: 'M6', title: 'Sweep', status: 'in_progress', note: 'O3 is built' }],
+    items: [
+      ...BASE.items,
+      { id: 'O3', title: 'Rider 360', type: 'ours', status: 'built', owner: 'Kunal', evidence: 'https://x/o3', milestone: 'M6' },
+    ],
+  };
+  const merged = mergeRegister(base, liveFixture());
+  const ms = Object.fromEntries(merged.milestones.map((m) => [m.id, m]));
+  const items = Object.fromEntries(merged.items.map((i) => [i.id, i]));
+  assert.equal(items.O3.status, 'built');
+  assert.equal(items.O3.evidence, 'https://x/o3');
+  assert.equal(ms.M6.status, 'in_progress');
+  assert.equal(ms.M6.note, 'O3 is built');
+});
+
+test('merge: built without evidence in data.json does not override the register', () => {
+  const base = { ...BASE, items: [{ id: 'O3', title: 'x', type: 'ours', status: 'built', owner: 'Kunal', milestone: 'M6' }] };
+  const items = Object.fromEntries(mergeRegister(base, liveFixture()).items.map((i) => [i.id, i]));
+  assert.equal(items.O3.status, 'not_started');
+});
