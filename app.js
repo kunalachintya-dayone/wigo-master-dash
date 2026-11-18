@@ -1,4 +1,5 @@
 import { compute, displayStatus, parseDate, STATUS_LABEL, validate } from './lib/compute.js';
+import { mergeRegister } from './lib/register.js';
 
 const VIEWS = [
   ['progress', 'Overall progress'],
@@ -14,7 +15,7 @@ const VIEWS = [
 ];
 
 const $app = document.getElementById('app');
-const state = { owner: 'all', status: 'all', type: 'all', depGroup: 'all', selectedMs: null, view: null, data: null };
+const state = { owner: 'all', status: 'all', type: 'all', depGroup: 'all', selectedMs: null, view: null, data: null, base: null, live: undefined };
 
 const esc = (v) =>
   String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -129,6 +130,17 @@ function nav() {
 
 /* ---------- 1. Overall progress ---------- */
 
+function renderLiveLine() {
+  const live = state.live;
+  if (live === undefined) return `<div class="banner info"><span>⟳</span><span>Checking wigo-admin for the latest register…</span></div>`;
+  if (live && live.source && !live.error) {
+    const s = live.source;
+    return `<div class="banner ok"><span>●</span><span><b>Live from wigo-admin.</b> Milestones and items are read from <code>${esc(s.repo)}</code> branch <code>${esc(s.branch)}</code> at <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.short)}</a> (${esc(fmtStamp(s.date))}). Owners, ask dates, partners, team, testing and waitlist come from data.json.</span></div>`;
+  }
+  const why = !live ? 'could not be reached' : live.configured === false ? 'is not connected (no GITHUB_TOKEN)' : `failed: ${live.error}`;
+  return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy.</b> The live register in wigo-admin ${esc(why)}, so milestones and items come from data.json.</span></div>`;
+}
+
 function renderBanner(meta) {
   if (meta && meta.reviewed_by) {
     return `<div class="banner ok">Numbers checked against the register by <b>${esc(meta.reviewed_by)}</b>${meta.reviewed_on ? ` on ${esc(fmtDate(meta.reviewed_on))}` : ''}.</div>`;
@@ -168,15 +180,15 @@ function renderProgress(v) {
     : `<div class="ms-detail muted">Tap a milestone for its name and evidence.</div>`;
   return `
   <section id="progress" aria-labelledby="h-progress">
-    ${sectionHead('progress', 'Overall progress', 'Share of in-our-control work done, calculated from the tracker.')}
+    ${sectionHead('progress', 'Overall progress', 'How much of the admin console (web dashboard) is built: milestones built out of all milestones, live from wigo-admin.')}
     <div class="kpis">
       <div class="card kpi hero">
-        <div class="label">Our work done</div>
-        <div class="value">${t.sharePct}%</div>
-        <div class="bar" role="img" aria-label="${t.sharePct} percent"><span style="width:${(t.share * 100).toFixed(1)}%"></span></div>
-        <div class="sub">${t.built} of ${t.ours} items in our control are built</div>
+        <div class="label">Admin console progress</div>
+        <div class="value">${t.overallPct}%</div>
+        <div class="bar" role="img" aria-label="${t.overallPct} percent"><span style="width:${(t.overallShare * 100).toFixed(1)}%"></span></div>
+        <div class="sub">${t.milestonesBuilt} of ${t.milestonesTotal} milestones built${t.milestonesInProgress ? ` · ${t.milestonesInProgress} in progress` : ''}</div>
       </div>
-      ${stat('<span class="dot" style="background:var(--green)"></span>Built', t.built, `${t.milestonesBuilt} of ${t.milestonesTotal} milestones`)}
+      ${stat('<span class="dot" style="background:var(--green)"></span>Built', t.built, `of ${t.ours} open follow-up items (${t.sharePct}%)`)}
       ${stat('<span class="dot" style="background:var(--amber)"></span>In progress', t.inProgress, 'our items being built')}
       ${stat('<span class="dot" style="background:var(--ink)"></span>Still ours', t.stillOurs, t.overdue ? `<span style="color:var(--red-ink);font-weight:600">${t.overdue} overdue</span>` : 'not yet built')}
       ${stat('<span class="dot" style="background:var(--red)"></span>Blocked on others', t.blockedOnOthers, 'waiting on someone else')}
@@ -586,6 +598,7 @@ function render() {
   const src = document.getElementById('source');
   if (src && data.meta && data.meta.register) src.textContent = `Source register: ${data.meta.register}.`;
   $app.innerHTML =
+    renderLiveLine() +
     renderBanner(data.meta) +
     nav() +
     renderProgress(v) +
@@ -631,7 +644,8 @@ async function main() {
   try {
     const res = await fetch('/data.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    state.data = await res.json();
+    state.base = await res.json();
+    state.data = state.base;
   } catch (err) {
     $app.innerHTML = `<div class="error-box">Could not load data.json (${esc(err.message)}).</div>`;
     document.getElementById('updated').textContent = '';
@@ -639,13 +653,15 @@ async function main() {
   }
   render();
   if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
-  try {
-    const res = await fetch('/api/commits', { headers: { accept: 'application/json' } });
-    state.commits = res.ok ? await res.json() : { configured: false };
-  } catch {
-    state.commits = { configured: false };
-  }
-  renderChart(state.commits);
+  const getJson = (url) =>
+    fetch(url, { headers: { accept: 'application/json' } })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null);
+  const [live, commits] = await Promise.all([getJson('/api/register'), getJson('/api/commits')]);
+  state.live = live;
+  if (live && live.source && !live.error) state.data = mergeRegister(state.base, live);
+  state.commits = commits || { configured: false };
+  render();
 }
 
 main();

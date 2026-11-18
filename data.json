@@ -8,6 +8,12 @@
     "reviewed_by": null,
     "reviewed_on": null
   },
+  "register_source": {
+    "repo": "kunalachintya-dayone/wigo-admin",
+    "branch": "admin-design",
+    "milestones": "docs/ADMIN_MILESTONES.md",
+    "followups": "docs/FOLLOWUPS_AND_DEPENDENCIES.md"
+  },
   "milestones": [
     {
       "id": "M1",
@@ -732,14 +738,14 @@
   "team": [
     {
       "name": "Shiva",
-      "role": "Daily tracker update; rider app liaison (X7)",
+      "role": "App side: rider app and its integration (X7)",
       "focus": null,
       "update": null,
       "updated_on": null
     },
     {
       "name": "Kunal",
-      "role": "Admin console build",
+      "role": "Web: admin console (wigo-admin)",
       "focus": null,
       "update": null,
       "updated_on": null

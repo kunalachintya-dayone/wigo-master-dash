@@ -3,14 +3,15 @@
 One read-only page that answers three questions in 30 seconds: what is built, what is still ours, and what is waiting on someone else and for how long.
 
 - Plain HTML and JavaScript. No build step, no login, works on a phone.
-- Every number is calculated from `data.json`. Nothing on the page is typed by hand.
-- Seeded from the follow-ups register in `kunalachintya-dayone/wigo-admin`, branch `admin-design`: `docs/FOLLOWUPS_AND_DEPENDENCIES.md` (O and X items) and `docs/ADMIN_MILESTONES.md` (M1 to M16), as of 16 Nov 2026.
+- Every number is calculated, never typed by hand.
+- **Live from wigo-admin.** Milestones (M1 to M16), our items (O#) and external items (X#) are read on every page load from `kunalachintya-dayone/wigo-admin`, branch `admin-design`: `docs/ADMIN_MILESTONES.md` and `docs/FOLLOWUPS_AND_DEPENDENCIES.md`. A milestone's evidence link is the commit that records or closes it ("record milestone 14", "Close milestone 12"). When that register changes, the page follows within 5 minutes, with no edit here.
+- **From `data.json`.** Everything the register does not hold: owners, ask dates, due dates, hand-written notes and evidence (which win over the live values), partner asks, team updates, testing and waitlist. It is also the saved copy the page falls back to if GitHub cannot be reached; a banner at the top says which source is showing.
 
 ## Page sections
 
 A sticky bar at the top jumps to each view. Every view has a link anchor, e.g. `/#n1co`.
 
-1. **Overall progress** (`#progress`). Share of in-our-control work done (built ÷ all ours items), built, in progress, still ours, blocked on others, next dated milestone, and M1 to M16 as built, in progress, not started or blocked. Tap a milestone for its note and evidence.
+1. **Overall progress** (`#progress`). Admin console progress (milestones built ÷ all milestones, with milestones in progress shown beside it), open follow-up items built, in progress, still ours, blocked on others, next dated milestone, and M1 to M16 as built, in progress, not started or blocked. Tap a milestone for its note and evidence.
 2. **n1co** (`#n1co`). Payment documentation, sandbox and webhooks: asked on, received, days waiting. Joint testing status.
 3. **Hexup** (`#hexup`). Hardware and cabinet integration status, and what is still needed from them.
 4. **Meta and module designs** (`#meta`). WhatsApp and Meta approvals, and design status for Energy, Inventory, Planning and Data Platform.
@@ -32,8 +33,10 @@ A sticky bar at the top jumps to each view. Every view has a link anchor, e.g. `
 
 ## Daily update (Shiva, by 6 pm IST)
 
+Built or not built comes from the wigo-admin register, so there is nothing to change here when a milestone lands. Edit `data.json` only for what the register does not hold.
+
 1. Edit `data.json` on GitHub (pencil icon) or locally.
-2. For each item that changed: set `status`, add the `evidence` link for anything `built`, set `updated_on` to today.
+2. Update team updates, partner asks (`received_on`), testing, waitlist, and any ask or due dates. Set an item's `status` to `in_progress` or `blocked` only when the register shows it as not built but work has started or stalled; that is the one status the live register does not overwrite. Set `updated_on` to today.
 3. Set `meta.updated_at` to now, for example `2026-11-19T18:00:00+05:30`.
 4. Run the check (or let GitHub Actions run it on push):
 
@@ -74,7 +77,7 @@ A sticky bar at the top jumps to each view. Every view has a link anchor, e.g. `
 
 Kim signs off by setting `meta.reviewed_by` and `meta.reviewed_on`.
 
-## Commit chart setup
+## GitHub setup (live register and Code updates)
 
 Set these on the Vercel project (Settings → Environment Variables):
 
@@ -83,6 +86,8 @@ Set these on the Vercel project (Settings → Environment Variables):
 | `GITHUB_TOKEN` | Fine-grained token, read-only **Contents** on the repos below. Required. |
 | `GITHUB_REPOS` | Optional. Overrides `github.repos` in `data.json`. Comma-separated `owner/repo` or `owner/repo@branch`. |
 | `AUTHOR_MAP` | Optional JSON mapping a GitHub login or commit name to a person, e.g. `{"shiva-gh":"Shiva"}`. Merged over `github.authors` in `data.json`. |
+
+The same token reads the live register: `register_source` in `data.json` names the repo, branch and the two files (defaults: `kunalachintya-dayone/wigo-admin`, `admin-design`). Without the token the page shows the saved copy in `data.json`.
 
 Releases are read from each repo's GitHub releases. Map Shiva's, Sneha's and Ajay's GitHub logins in `github.authors` or `AUTHOR_MAP` so their commits are named. The token stays on the server; the browser only gets the counts. Until it is set, Code updates says "Not connected yet".
 
@@ -100,23 +105,19 @@ npm test
 
 ## Hosting
 
-The repo is `kunalachintya-dayone/wigo-master-dash`. The site is the Vercel project `wigo-build-dashboard` in the "Kunal's projects" team, at https://wigo-build-dashboard.vercel.app. Standard deployment protection is on, so the production URL opens without a login and preview URLs need one.
+The repo is `kunalachintya-dayone/wigo-master-dash`. The site is the Vercel project `wigo-progress-dashboard` in the `dayone-ventures` team, at https://wigo-progress-dashboard.vercel.app. It is linked to this repo, and every push to the default branch (`claude/wizardly-goldberg-c1gcb7`) redeploys in about a minute. The production URL opens without a login.
 
-The Vercel project is still linked to the old `latent-0/wigo-master-dash` address, so a push to this repo does not redeploy the site yet. To fix that once:
-
-1. Install the Vercel GitHub app on `kunalachintya-dayone` (https://github.com/apps/vercel) with access to this repo.
-2. In Vercel, open `wigo-build-dashboard`, go to Settings, then Git, and connect `kunalachintya-dayone/wigo-master-dash`. Set the production branch to the repo's default branch.
-3. Add `GITHUB_TOKEN` under Environment Variables (fine-grained, read-only Contents on `wigo-admin` and `wigo-master-dash`, owned by `kunalachintya-dayone`), then redeploy.
-
-Until then, production is updated by deploying the files directly. The last direct deploy is recorded in `docs/SESSION_HANDOFF.md`.
+`GITHUB_TOKEN` is set on that project (see GitHub setup above). The older project `wigo-build-dashboard` in the "Kunal's projects" team is a stale copy and is not updated.
 
 ## Files
 
 ```
 index.html, styles.css, app.js   the page
 lib/compute.js                   every calculation and the data checks (shared by page, script and tests)
+lib/register.js                  reads the wigo-admin register and merges it over data.json
 data.json                        the only file updated day to day
-api/commits.js                   Vercel function for section 5
+api/commits.js                   Vercel function for Code updates
+api/register.js                  Vercel function that reads the live register from wigo-admin
 scripts/check-data.mjs           validates data.json
 scripts/dev-server.mjs           local preview
 assets/                          WIGO logo and icons (from wigoenergy.com)

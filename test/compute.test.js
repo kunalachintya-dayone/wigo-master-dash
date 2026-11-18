@@ -237,3 +237,18 @@ test('weekly releases and per-person totals', () => {
   assert.deepEqual(w.find((x) => x.name === 'Kunal'), { name: 'Kunal', commits: 3, releases: 1 });
   assert.equal(w.find((x) => x.name === 'Shiva').releases, 1);
 });
+
+test('admin console progress is milestones built over all milestones, in progress shown apart', () => {
+  const t = compute({
+    milestones: [
+      { id: 'M1', title: 'a', status: 'built', evidence: 'https://x/1' },
+      { id: 'M2', title: 'b', status: 'built' }, // no evidence: shows in progress, not counted
+      { id: 'M3', title: 'c', status: 'in_progress' },
+      { id: 'M4', title: 'd', status: 'not_started' },
+    ],
+    items: [],
+  }).totals;
+  assert.equal(t.milestonesBuilt, 1);
+  assert.equal(t.milestonesInProgress, 2);
+  assert.equal(t.overallPct, 25);
+});

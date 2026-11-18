@@ -28,9 +28,8 @@ One read-only page, shared with Eric and Kim, showing what is built, what is sti
 
 ## Hosting
 
-- Vercel project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`) in the "Kunal's projects" team serves https://wigo-build-dashboard.vercel.app. It is the only Vercel team on the account, so the earlier plan to move to a `dayone-ventures` team is dropped unless that team is created.
-- Standard deployment protection: the production URL opens without a login; preview URLs need one.
-- The project is still linked to `latent-0/wigo-master-dash`, so pushes here do not redeploy. Production is updated by a direct file deploy of a commit on the default branch.
-- Last direct deploy: 18 Nov 2026, commit `e21a8d2`, deployment `dpl_2CeoPoUeN284Fymaaa7eJj7QzBbm`. Checked live: all ten views render with no console errors, `data.json` is current, `docs/` returns 404.
-- Still needed from the owner (cannot be done from a session): install the Vercel GitHub app on `kunalachintya-dayone` and reconnect the project's Git to `kunalachintya-dayone/wigo-master-dash`; add `GITHUB_TOKEN` (fine-grained, read-only Contents on wigo-admin and wigo-master-dash). Never paste it in a chat.
-- The production branch is `claude/wizardly-goldberg-c1gcb7`, the repo default. Renaming it to `main` is a GitHub settings change (Settings, Branches, rename default branch); do it before relinking Vercel so the production branch is set once.
+- Live site: Vercel project `wigo-progress-dashboard` in the `dayone-ventures` team, https://wigo-progress-dashboard.vercel.app. Kunal chose this team on 18 Nov. It is Git-linked to `kunalachintya-dayone/wigo-master-dash`, production branch `claude/wizardly-goldberg-c1gcb7` (the repo default), so every push to that branch redeploys in under a minute.
+- `GITHUB_TOKEN` is set there (Production, secret, read-only Contents on wigo-admin and wigo-master-dash). It feeds both Code updates and the live register (`/api/register`).
+- Production URL opens without a login; `docs/` and `CLAUDE.md` return 404.
+- The Vercel connector some sessions use is signed in to a different account, the "Kunal's projects" team. Its project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`) is the old copy, still linked to `latent-0/wigo-master-dash`. Do not deploy there; Kunal decides when to retire it. Work on dayone-ventures through the Vercel dashboard.
+- Renaming the default branch to `main` was offered and declined for now.

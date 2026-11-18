@@ -58,6 +58,8 @@ section { margin-bottom: 22px; }
 .banner { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px; }
 .banner.warn { background: var(--amber-soft); color: var(--amber-ink); border: 1px solid #F5D9A0; }
 .banner.ok { background: var(--green-soft); color: var(--green-ink); border: 1px solid #B7EFC5; }
+.banner.info { background: var(--grey-soft); color: var(--grey-ink); border: 1px solid var(--grey); }
+.banner a { color: inherit; font-weight: 600; }
 .banner b { font-weight: 700; }
 
 /* Header numbers */
