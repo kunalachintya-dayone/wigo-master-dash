@@ -117,9 +117,7 @@ npm test
 
 ## Hosting
 
-The repo is `kunalachintya-dayone/wigo-master-dash`. The site is the Vercel project `wigo-progress-dashboard` in the `dayone-ventures` team, at https://wigo-progress-dashboard.vercel.app. It is linked to this repo, and every push to the default branch (`claude/wizardly-goldberg-c1gcb7`) redeploys in about a minute. The production URL opens without a login.
-
-`GITHUB_TOKEN` is set on that project (see GitHub setup above). The older project `wigo-build-dashboard` in the "Kunal's projects" team is a stale copy and is not updated.
+The site is the Vercel project `wigo-progress-dashboard` in the `dayone-ventures` team, at https://wigo-progress-dashboard.vercel.app. It is connected to this repo: every push to `claude/wizardly-goldberg-c1gcb7` deploys to production. `GITHUB_TOKEN` and `WIGOAPP_TOKEN` are set on the project, so everything reads live. Standard deployment protection: the production URL opens without a login and preview URLs need one.
 
 ## Files
 

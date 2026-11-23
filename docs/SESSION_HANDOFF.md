@@ -32,8 +32,8 @@ Kunal's progress comes from wigo-admin (`/api/register`); Shiva's from `Shivadev
 
 ## Hosting
 
-- Vercel project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`, team "Kunal's projects") serves https://wigo-build-dashboard.vercel.app. Standard protection: the production URL opens without a login.
-- `GITHUB_TOKEN` is set (23 Nov 2026, sensitive, production and preview). `/api/register`, `/api/commits` and `/api/tests` read live from GitHub. The owner will rotate it to a fine-grained read-only token later.
-- `WIGOAPP_TOKEN` is not set, so `/api/app` (Shiva's WIGOAPP) shows the saved copy. It needs a token that can read `Shivadevdayone/WIGOAPP`.
-- Git is still linked to `latent-0/wigo-master-dash`. The Vercel login's GitHub connection only covers `latent-0`, so Vercel cannot see `kunalachintya-dayone` repos even with the Vercel app installed there. Fix in Vercel: Account Settings, Authentication, connect GitHub as `kunalachintya-dayone` (or Project, Settings, Git, Connect, Add GitHub account), then link `kunalachintya-dayone/wigo-master-dash` with production branch `claude/wizardly-goldberg-c1gcb7`.
-- Until then, production is updated by a direct file deploy of the default branch head (the Vercel REST API with the project id above).
+- **Live site:** https://wigo-progress-dashboard.vercel.app, Vercel project `wigo-progress-dashboard` (`prj_g5IXSHMfGJ9tAhpnQbY78seZIK4c`) in the `dayone-ventures` team of the Vercel account kunal@dayoneventurepartners.com (`kunalachintya-dayone`).
+- Git: connected to `kunalachintya-dayone/wigo-master-dash`. Every push to `claude/wizardly-goldberg-c1gcb7` deploys to production by itself. No manual deploys.
+- `GITHUB_TOKEN` and `WIGOAPP_TOKEN` are set (sensitive, production). The register, commits, tests and Shiva's WIGOAPP feed all read live (checked 23 Nov 2026). The owner will rotate `GITHUB_TOKEN` to a fine-grained read-only token later.
+- Standard protection: the production URL opens without a login.
+- **Old site:** `wigo-build-dashboard.vercel.app` in the old account (kunalachintya01@gmail.com, team "Kunal's projects") is no longer updated. Retire it once the new link has been shared.
