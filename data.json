@@ -1,7 +1,7 @@
 {
   "meta": {
     "project": "WIGO admin console",
-    "updated_at": "2026-11-23T12:02:00+05:30",
+    "updated_at": "2026-11-23T13:00:00+05:30",
     "updated_by": "Kunal",
     "register": "docs/FOLLOWUPS_AND_DEPENDENCIES.md and docs/ADMIN_MILESTONES.md, wigo-admin branch admin-design",
     "register_as_of": "2026-11-23",
@@ -870,10 +870,10 @@
       ],
       "asks": [
         {
-          "title": "Payment API documentation",
+          "title": "ePay integration documentation (8 payment scenarios)",
           "asked_on": "2026-10-12",
-          "received_on": null,
-          "note": "Fake adapter was built against n1co's public docs (HANDOFF.md). Confirm the date the full API docs were asked for."
+          "received_on": "2026-11-20",
+          "note": "Arrived Thursday night (20 Nov, 3:30 am IST). Reviewed; our review and clarification document goes to n1co on 23 or 24 Nov. Assumed to be the payment API docs first asked for on 12 Oct."
         },
         {
           "title": "Sandbox credentials",
@@ -886,6 +886,12 @@
           "asked_on": "2026-10-12",
           "received_on": null,
           "note": "Covers chargeback events and the top-up attempt feed. Confirm the date."
+        },
+        {
+          "title": "Reply to our financing screens response (NC-01 to NC-18)",
+          "asked_on": "2026-11-18",
+          "received_on": null,
+          "note": "We shared our response on Wed 18 Nov, 6:30 pm. No reply yet; following up on 23 Nov together with the ePay review."
         }
       ],
       "tracks": [
@@ -894,6 +900,18 @@
           "status": "built",
           "evidence": "https://github.com/kunalachintya-dayone/wigo-admin/commit/3e1b84605ddd04f5aa4c6dfdb4b801fa5de1bfc4",
           "note": "Live adapter switches on with N1CO_DRIVER=live once sandbox credentials arrive."
+        },
+        {
+          "title": "ePay review and clarification document for n1co",
+          "status": "in_progress",
+          "evidence": null,
+          "note": "Docs reviewed. Sharing with n1co on 23 or 24 Nov."
+        },
+        {
+          "title": "ePay integration: 8 payment scenarios",
+          "status": "in_progress",
+          "evidence": null,
+          "note": "Implementation under way since the docs arrived on 20 Nov. Target: Fri 27 Nov."
         },
         {
           "title": "Joint testing in the n1co sandbox",
