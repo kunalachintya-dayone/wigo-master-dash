@@ -72,6 +72,7 @@ section { margin-bottom: 22px; }
 .kpi.hero .label, .kpi.hero .sub { color: #B8BCC1; }
 .kpi.hero .value { font-size: 46px; color: var(--green); }
 .bar { height: 8px; border-radius: 99px; background: #2A2E33; overflow: hidden; margin-top: 10px; }
+.bar.light { background: var(--line); }
 .bar > span { display: block; height: 100%; background: var(--green); border-radius: 99px; }
 .kpi .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
 
@@ -179,6 +180,7 @@ section[id] { scroll-margin-top: 58px; }
 
 /* Team */
 .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.team-grid-2 { grid-template-columns: repeat(2, 1fr); }
 .team-card { padding: 14px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
 .team-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .team-head h3 { font-size: 17px; }
@@ -212,7 +214,7 @@ section[id] { scroll-margin-top: 58px; }
 }
 @media (max-width: 640px) {
   .kpis-3 { grid-template-columns: 1fr; }
-  .team-grid { grid-template-columns: 1fr; }
+  .team-grid, .team-grid-2 { grid-template-columns: 1fr; }
 }
 
 /* Phone */

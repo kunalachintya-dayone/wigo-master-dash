@@ -3,6 +3,8 @@
 //
 // Configuration (Vercel project environment variables):
 //   GITHUB_TOKEN   required. A fine-grained token with read-only "Contents" access to the repos.
+//   WIGOAPP_TOKEN  optional. Read-only token for repos owned by Shivadevdayone (private). Without it
+//                  those repos are skipped and listed under `skipped`; the rest still load.
 //   GITHUB_REPOS   optional. Comma-separated "owner/repo" or "owner/repo@branch".
 //                  Falls back to data.json -> github.repos.
 //   AUTHOR_MAP     optional. JSON object mapping a GitHub login, email or commit name to a person.
@@ -21,6 +23,11 @@ export function lastDays(now = new Date(), n = DAYS) {
   const out = [];
   for (let i = n - 1; i >= 0; i--) out.push(dayKey(new Date(now.getTime() - i * 86400000)));
   return out;
+}
+
+/** Which token reads a repo: Shiva's repos use WIGOAPP_TOKEN, everything else GITHUB_TOKEN. */
+export function tokenFor(repo, env = process.env) {
+  return /^shivadevdayone\//i.test(repo) ? env.WIGOAPP_TOKEN : env.GITHUB_TOKEN;
 }
 
 export function parseRepo(spec) {
@@ -167,11 +174,27 @@ export default async function handler(req, res) {
   const days = lastDays(now);
   const since = new Date(now.getTime() - (DAYS + 1) * 86400000);
   try {
-    const uniqueRepos = [...new Set(repoSpecs.map((r) => r.repo))];
+    // A repo with no token, or one GitHub refuses, is skipped and reported instead of failing the whole chart.
+    const skipped = [];
+    const usable = repoSpecs.filter((r) => {
+      if (tokenFor(r.repo)) return true;
+      skipped.push(`${r.repo}: no token set`);
+      return false;
+    });
+    const uniqueRepos = [...new Set(usable.map((r) => r.repo))];
+    const settle = async (label, p) => {
+      try {
+        return await p;
+      } catch (err) {
+        skipped.push(String(err.message || err));
+        return [];
+      }
+    };
     const [lists, releaseLists] = await Promise.all([
-      Promise.all(repoSpecs.map((r) => fetchCommits(r, since, token))),
-      Promise.all(uniqueRepos.map((r) => fetchReleases(r, token))),
+      Promise.all(usable.map((r) => settle(r.repo, fetchCommits(r, since, tokenFor(r.repo))))),
+      Promise.all(uniqueRepos.map((r) => settle(r, fetchReleases(r, tokenFor(r))))),
     ]);
+    if (usable.length && skipped.length >= usable.length + uniqueRepos.length) throw new Error(skipped[0]);
     const counts = tally(lists.flat(), authors, days);
     const releases = weeklyReleases(releaseLists.flat(), authors, days);
     res.status(200).json({
@@ -180,6 +203,7 @@ export default async function handler(req, res) {
       generated_at: now.toISOString(),
       ...counts,
       releases,
+      skipped,
       weekly: weekly(counts.people, releases),
     });
   } catch (err) {

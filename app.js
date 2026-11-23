@@ -1,9 +1,12 @@
 import { compute, displayStatus, parseDate, STATUS_LABEL, validate } from './lib/compute.js';
 import { mergeRegister } from './lib/register.js';
 import { mergeTesting } from './lib/tests.js';
+import { mergeApp } from './lib/app.js';
 
 const VIEWS = [
-  ['progress', 'Overall progress'],
+  ['combined', 'Combined'],
+  ['progress', 'Kunal: admin console'],
+  ['shiva', 'Shiva: rider app'],
   ['n1co', 'n1co'],
   ['hexup', 'Hexup'],
   ['meta', 'Meta and designs'],
@@ -147,6 +150,18 @@ function renderLiveLine() {
   return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy.</b> The live register in wigo-admin ${esc(why)}, so milestones and items come from data.json.</span></div>`;
 }
 
+function renderAppLine() {
+  const live = state.appLive;
+  if (live === undefined) return `<div class="banner info"><span>⟳</span><span>Checking WIGOAPP for Shiva's latest progress…</span></div>`;
+  if (live && live.configured === false) return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy of Shiva's progress.</b> WIGOAPP is private and <code>WIGOAPP_TOKEN</code> is not set on the Vercel project yet.</span></div>`;
+  if (live && live.source && !live.error) {
+    const s = live.source;
+    return `<div class="banner ok"><span>●</span><span><b>Live from WIGOAPP.</b> Shiva's progress is read from <code>${esc(s.repo)}</code> branch <code>${esc(s.branch)}</code> at <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.short)}</a> (${esc(fmtStamp(s.date))}): the build status in <code>${esc(s.file)}</code> and the latest commits.</span></div>`;
+  }
+  const why = !live ? 'could not be reached' : `failed: ${live.error}`;
+  return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy of Shiva's progress.</b> The live read of WIGOAPP ${esc(why)}, so the rider app numbers come from data.json.</span></div>`;
+}
+
 function renderBanner(meta) {
   if (meta && meta.reviewed_by) {
     return `<div class="banner ok">Numbers checked against the register by <b>${esc(meta.reviewed_by)}</b>${meta.reviewed_on ? ` on ${esc(fmtDate(meta.reviewed_on))}` : ''}.</div>`;
@@ -154,6 +169,89 @@ function renderBanner(meta) {
   return `<div class="banner warn"><span>⚠</span><span><b>Not yet reviewed.</b> Numbers come from the follow-ups register${
     meta && meta.register_as_of ? ` as of ${esc(fmtDate(meta.register_as_of))}` : ''
   } and have not been checked by Kim yet.</span></div>`;
+}
+
+/* ---------- 0. Combined ---------- */
+
+function personCard(p, href) {
+  const share = p.total ? (p.built / p.total) * 100 : 0;
+  const commits = state.commits && state.commits.weekly ? state.commits.weekly.find((w) => w.name === p.name) : null;
+  return `<div class="card team-card">
+    <div class="team-head"><h3>${esc(p.name)}</h3><span class="pill built">${p.pct}%</span></div>
+    <div class="note">${esc(p.title)}</div>
+    <div class="bar light" role="img" aria-label="${p.pct} percent"><span style="width:${share.toFixed(1)}%"></span></div>
+    <div class="team-counts">${p.built} of ${p.total} ${esc(p.unit)} built${p.inProgress ? ` · ${p.inProgress} in progress` : ''}</div>
+    <div class="team-counts">${commits ? `${plural(commits.commits, 'commit', 'commits')} in the last 7 days` : '<span class="muted">Commits this week not loaded</span>'}</div>
+    <div class="team-counts"><a href="${href}">See ${esc(p.name)}'s work</a></div>
+  </div>`;
+}
+
+function renderCombined(v) {
+  const c = v.combined;
+  return `
+  <section id="combined" aria-labelledby="h-combined">
+    ${sectionHead('combined', 'Combined progress', "Kunal's admin console and Shiva's rider app, each counted on its own and then added up. Built needs an evidence link.")}
+    <div class="kpis kpis-3">
+      <div class="card kpi hero">
+        <div class="label">Collective progress</div>
+        <div class="value">${c.pct}%</div>
+        <div class="bar" role="img" aria-label="${c.pct} percent"><span style="width:${(c.share * 100).toFixed(1)}%"></span></div>
+        <div class="sub">${c.built} of ${c.total} workstreams built${c.inProgress ? ` · ${c.inProgress} in progress` : ''}</div>
+      </div>
+      ${c.parts.map((p) => stat(`${esc(p.name)} · ${esc(p.title)}`, `${p.pct}%`, `${p.built} of ${p.total} ${esc(p.unit)} built`)).join('')}
+    </div>
+    <div class="team-grid team-grid-2" style="margin-top:12px">${personCard(c.parts[0], '#progress')}${personCard(c.parts[1], '#shiva')}</div>
+    <div class="chart-note">A workstream is one admin console milestone (Kunal) or one rider app workflow or vendor adapter (Shiva). They differ in size, so read the two percentages side by side, not as equal effort.</div>
+  </section>`;
+}
+
+/* ---------- 0b. Shiva: rider app ---------- */
+
+function renderShiva(v) {
+  const a = v.app;
+  const t = a.totals;
+  const head = sectionHead('shiva', 'Shiva: rider app', 'The WIGO rider app and its backend, read from the WIGOAPP repo: each workflow and vendor adapter, what is still open, and the latest commits.');
+  if (!a.units.length) return `<section id="shiva">${head}<div class="card"><div class="chart-note">No <code>app</code> units in data.json and the live read of WIGOAPP has not loaded.</div></div></section>`;
+  const rows = a.units
+    .map(
+      (u) => `<tr>
+      <td data-label="Workstream"><span class="id">${esc(u.id)}</span><span class="title">${esc(u.title)}</span>${u.detail ? `<div class="note">${esc(u.detail)}</div>` : ''}</td>
+      <td data-label="Type" class="inline-label muted">${u.kind === 'workflow' ? 'Workflow' : 'Vendor adapter'}</td>
+      <td data-label="Status" class="inline-label">${pill(u)} ${flagPills(u)}${u.status_text ? ` <span class="muted">${esc(u.status_text)}</span>` : ''}</td>
+      <td data-label="Evidence" class="inline-label">${evidenceLink(u)}</td>
+    </tr>`
+    )
+    .join('');
+  const open = a.open.length ? `<ol class="releases">${a.open.map((o) => `<li>${esc(o)}</li>`).join('')}</ol>` : `<div class="chart-note">Nothing listed as open.</div>`;
+  const recent = a.recent.length
+    ? `<ul class="releases">${a.recent
+        .map((c) => `<li>${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${esc(c.subject)}</a>` : esc(c.subject)} <span class="muted">${esc(c.short)} · ${esc(fmtStamp(c.date))}</span></li>`)
+        .join('')}</ul>`
+    : `<div class="chart-note">Latest commits appear here once WIGOAPP has been read live.</div>`;
+  const note = a.live ? 'Read live from the WIGOAPP README. Evidence links to the README at that commit.' : a.note;
+  return `
+  <section id="shiva" aria-labelledby="h-shiva">
+    ${head}
+    <div class="kpis">
+      <div class="card kpi hero">
+        <div class="label">Rider app progress</div>
+        <div class="value">${t.pct}%</div>
+        <div class="bar" role="img" aria-label="${t.pct} percent"><span style="width:${(t.share * 100).toFixed(1)}%"></span></div>
+        <div class="sub">${t.built} of ${t.total} workstreams built${t.screensTotal ? ` · ${t.screensDone} of ${t.screensTotal} screens real` : ''}</div>
+      </div>
+      ${stat('<span class="dot" style="background:var(--green)"></span>Built', t.built, 'real and working')}
+      ${stat('<span class="dot" style="background:var(--amber)"></span>In progress', t.inProgress, 'partly real or being built')}
+      ${stat('<span class="dot" style="background:var(--grey)"></span>Not started', t.notStarted, 'still a stand-in')}
+      ${stat('<span class="dot" style="background:var(--red)"></span>Blocked', t.blocked, 'waiting on someone else')}
+    </div>
+    <div class="card" style="margin-top:12px"><div class="table-wrap"><table class="stack">
+      <thead><tr><th>Workstream</th><th>Type</th><th>Status</th><th>Evidence</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>${note ? `<div class="chart-note">${esc(note)}</div>` : ''}</div>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="card"><h3 class="card-title">Still open</h3>${open}</div>
+      <div class="card"><h3 class="card-title">Latest commits</h3>${recent}</div>
+    </div>
+  </section>`;
 }
 
 function renderProgress(v) {
@@ -186,7 +284,7 @@ function renderProgress(v) {
     : `<div class="ms-detail muted">Tap a milestone for its name and evidence.</div>`;
   return `
   <section id="progress" aria-labelledby="h-progress">
-    ${sectionHead('progress', 'Overall progress', 'How much of the admin console (web dashboard) is built: milestones built out of all milestones, live from wigo-admin.')}
+    ${sectionHead('progress', 'Kunal: admin console', 'How much of the admin console (web dashboard) is built: milestones built out of all milestones, live from wigo-admin.')}
     <div class="kpis">
       <div class="card kpi hero">
         <div class="label">Admin console progress</div>
@@ -582,7 +680,7 @@ function renderChart(payload) {
     <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Commits per person per day">${svg}</svg>
     <div class="legend">${legend}</div>
   </div>${releaseList}
-  <div class="chart-note">Repos: ${esc((payload.repos || []).join(', '))}. A repo without @branch counts its default branch.</div>`;
+  <div class="chart-note">Repos: ${esc((payload.repos || []).join(', '))}. A repo without @branch counts its default branch.${payload.skipped && payload.skipped.length ? ` <b>Skipped:</b> ${esc(payload.skipped.join('; '))}.` : ''}</div>`;
 }
 
 function niceStep(max) {
@@ -605,9 +703,12 @@ function render() {
   if (src && data.meta && data.meta.register) src.textContent = `Source register: ${data.meta.register}.`;
   $app.innerHTML =
     renderLiveLine() +
+    renderAppLine() +
     renderBanner(data.meta) +
     nav() +
+    renderCombined(v) +
     renderProgress(v) +
+    renderShiva(v) +
     renderN1co(v) +
     renderHexup(v) +
     renderMeta(v) +
@@ -663,12 +764,14 @@ async function main() {
     fetch(url, { headers: { accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null);
-  const [live, commits, tests] = await Promise.all([getJson('/api/register'), getJson('/api/commits'), getJson('/api/tests')]);
+  const [live, commits, tests, appLive] = await Promise.all([getJson('/api/register'), getJson('/api/commits'), getJson('/api/tests'), getJson('/api/app')]);
   state.live = live;
+  state.appLive = appLive;
   state.tests = tests;
   let data = state.base;
   if (live && live.source && !live.error) data = mergeRegister(data, live);
   if (tests && tests.results && !tests.error) data = { ...data, testing: mergeTesting(data.testing, tests.results) };
+  data = mergeApp(data, appLive);
   state.data = data;
   state.commits = commits || { configured: false };
   render();

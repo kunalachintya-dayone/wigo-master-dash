@@ -7,8 +7,9 @@ import { fileURLToPath } from 'node:url';
 import commits from '../api/commits.js';
 import register from '../api/register.js';
 import tests from '../api/tests.js';
+import app from '../api/app.js';
 
-const api = { '/api/commits': commits, '/api/register': register, '/api/tests': tests };
+const api = { '/api/commits': commits, '/api/register': register, '/api/tests': tests, '/api/app': app };
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml' };

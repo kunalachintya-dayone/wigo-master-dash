@@ -14,6 +14,101 @@
     "milestones": "docs/ADMIN_MILESTONES.md",
     "followups": "docs/FOLLOWUPS_AND_DEPENDENCIES.md"
   },
+  "app_source": {
+    "repo": "Shivadevdayone/WIGOAPP",
+    "branch": "main",
+    "file": "README.md"
+  },
+  "app": {
+    "owner": "Shiva",
+    "title": "Rider app",
+    "note": "Saved copy of the build status in the WIGOAPP README, used only when the live read fails.",
+    "units": [
+      {
+        "id": "WF 01",
+        "title": "WF 01 Onboarding (Buy + Rent)",
+        "kind": "workflow",
+        "status": "built",
+        "status_text": "23 of 23 screens real",
+        "done": 23,
+        "total": 23,
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "WF 02",
+        "title": "WF 02 Daily App",
+        "kind": "workflow",
+        "status": "built",
+        "status_text": "31 of 31 screens real",
+        "done": 31,
+        "total": 31,
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "A1",
+        "title": "OTP",
+        "kind": "adapter",
+        "status": "in_progress",
+        "status_text": "Conditionally real",
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "A2",
+        "title": "Payments — generic checkout",
+        "kind": "adapter",
+        "status": "in_progress",
+        "status_text": "Still fake, by design",
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "A3",
+        "title": "Payments — financing",
+        "kind": "adapter",
+        "status": "built",
+        "status_text": "Real",
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "A4",
+        "title": "Document storage",
+        "kind": "adapter",
+        "status": "not_started",
+        "status_text": "Still fake",
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "A5",
+        "title": "Notifications — push & email",
+        "kind": "adapter",
+        "status": "built",
+        "status_text": "Real",
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      },
+      {
+        "id": "A6",
+        "title": "Notifications — WhatsApp/SMS",
+        "kind": "adapter",
+        "status": "blocked",
+        "status_text": "Still fake",
+        "evidence": "https://github.com/Shivadevdayone/WIGOAPP/blob/4484c6f6841b2482177cd9970e1878bc648d3514/README.md",
+        "updated_on": "2026-11-20"
+      }
+    ],
+    "open": [
+      "Real card processing for the generic checkout flows",
+      "Cloud document storage",
+      "WhatsApp/SMS notification channel",
+      "Deposit hold-vs-refund design gap",
+      "Live-environment verification"
+    ]
+  },
   "milestones": [
     {
       "id": "M1",
@@ -1156,12 +1251,15 @@
       "kunalachintya-dayone/wigo-admin@admin-design",
       "kunalachintya-dayone/wigo-admin@main",
       "kunalachintya-dayone/wigo-admin@claude/admiring-mendel-d53nzg",
-      "kunalachintya-dayone/wigo-master-dash"
+      "kunalachintya-dayone/wigo-master-dash",
+      "Shivadevdayone/WIGOAPP"
     ],
     "authors": {
       "latent-0": "Kunal",
       "Kunal Achintya Reddy": "Kunal",
-      "kunalachintya-dayone": "Kunal"
+      "kunalachintya-dayone": "Kunal",
+      "Shivadevdayone": "Shiva",
+      "Shiva": "Shiva"
     }
   }
 }

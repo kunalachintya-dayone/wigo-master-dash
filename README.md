@@ -92,6 +92,15 @@ Set these on the Vercel project (Settings → Environment Variables):
 
 The same token reads the live register: `register_source` in `data.json` names the repo, branch and the two files (defaults: `kunalachintya-dayone/wigo-admin`, `admin-design`). Without the token the page shows the saved copy in `data.json`.
 
+### Shiva's rider app (WIGOAPP)
+
+The page shows Kunal's work (admin console) and Shiva's work (rider app) separately, then a combined view. Shiva's side is read live from `Shivadevdayone/WIGOAPP` by `/api/app`, named by `app_source` in `data.json`:
+
+- the build status in `README.md`: screen counts per workflow (`WF 01`, `WF 02`), the vendor adapter table and the "still genuinely open" list. Each workflow and each adapter is one workstream. Real is built, conditionally real or actively being built is in progress, blocked on someone is blocked, anything else is not started.
+- the latest commits on `main`, shown as they land.
+
+WIGOAPP is private and `GITHUB_TOKEN` is Kunal's, so Shiva's repo has its own variable: `WIGOAPP_TOKEN`, a fine-grained token with read-only **Contents** on `Shivadevdayone/WIGOAPP` (created by Shiva, or by anyone with access to it). It feeds `/api/app` and, for repos owned by `Shivadevdayone`, Code updates too. Without it Shiva's section shows the saved copy and Code updates skips that repo; Kunal's side is unaffected. Keep the README's headline lines, adapter table and open list in their current shape and the numbers follow; if the shape changes the page falls back to the saved copy in `data.json -> app`. Refresh that copy when the README changes much.
+
 Releases are read from each repo's GitHub releases. Map Shiva's, Sneha's and Ajay's GitHub logins in `github.authors` or `AUTHOR_MAP` so their commits are named. The token stays on the server; the browser only gets the counts. Until it is set, Code updates says "Not connected yet".
 
 ## Run locally
@@ -118,9 +127,11 @@ The repo is `kunalachintya-dayone/wigo-master-dash`. The site is the Vercel proj
 index.html, styles.css, app.js   the page
 lib/compute.js                   every calculation and the data checks (shared by page, script and tests)
 lib/register.js                  reads the wigo-admin register and merges it over data.json
+lib/app.js                       reads Shiva's WIGOAPP README and merges it over data.json
 data.json                        the only file updated day to day
 api/commits.js                   Vercel function for Code updates
 api/register.js                  Vercel function that reads the live register from wigo-admin
+api/app.js                       Vercel function that reads Shiva's progress from WIGOAPP
 scripts/check-data.mjs           validates data.json
 scripts/dev-server.mjs           local preview
 assets/                          WIGO logo and icons (from wigoenergy.com)

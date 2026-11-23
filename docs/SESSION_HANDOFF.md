@@ -4,7 +4,7 @@ Last updated 18 Nov 2026. Read this before changing the dashboard. `README.md` c
 
 ## Goal
 
-One read-only page, shared with Eric and Kim, showing what is built, what is still ours, and what is waiting on others. Ten views: progress, n1co, Hexup, Meta and designs, team, tracker, code updates, testing, waitlist, dependencies. Every number is calculated from `data.json` in `lib/compute.js`.
+One read-only page, shared with Eric and Kim, showing what is built, what is still ours, and what is waiting on others. Twelve views: combined, Kunal's admin console, Shiva's rider app, n1co, Hexup, Meta and designs, team, tracker, code updates, testing, waitlist, dependencies. Every number is calculated from `data.json` in `lib/compute.js`.
 
 ## History
 
@@ -25,6 +25,10 @@ One read-only page, shared with Eric and Kim, showing what is built, what is sti
 - n1co documentation and webhook requests are dated 12 Oct, the same day as the sandbox request. Confirm the real date of the formal documentation request.
 - Team updates come from the team daily; waitlist numbers come from Eric's export.
 - `meta.reviewed_by` is empty until Kim signs off, so the "Not yet reviewed" banner shows.
+
+## Two people, one page
+
+Kunal's progress comes from wigo-admin (`/api/register`); Shiva's from `Shivadevdayone/WIGOAPP` (`/api/app`, see README, "Shiva's rider app"). The Combined view adds the two (`computeCombined` in `lib/compute.js`). WIGOAPP is private: Vercel needs a separate `WIGOAPP_TOKEN` (read-only Contents on that repo); `GITHUB_TOKEN` is Kunal's and cannot see it. Without it the rider app shows the saved copy in `data.json -> app`. Shiva's README build status is dated 12 Nov and lags the commits, so the commit list is the fresher signal.
 
 ## Hosting
 
