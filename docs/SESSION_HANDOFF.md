@@ -32,8 +32,8 @@ Kunal's progress comes from wigo-admin (`/api/register`); Shiva's from `Shivadev
 
 ## Hosting
 
-- Live site: Vercel project `wigo-progress-dashboard` in the `dayone-ventures` team, https://wigo-progress-dashboard.vercel.app. Kunal chose this team on 18 Nov. It is Git-linked to `kunalachintya-dayone/wigo-master-dash`, production branch `claude/wizardly-goldberg-c1gcb7` (the repo default), so every push to that branch redeploys in under a minute.
-- `GITHUB_TOKEN` is set there (Production, secret, read-only Contents on wigo-admin and wigo-master-dash). It feeds both Code updates and the live register (`/api/register`).
-- Production URL opens without a login; `docs/` and `CLAUDE.md` return 404.
-- The Vercel connector some sessions use is signed in to a different account, the "Kunal's projects" team. Its project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`) is the old copy, still linked to `latent-0/wigo-master-dash`. Do not deploy there; Kunal decides when to retire it. Work on dayone-ventures through the Vercel dashboard.
-- Renaming the default branch to `main` was offered and declined for now.
+- Vercel project `wigo-build-dashboard` (`prj_hoaOC7gbh8RBVCZVPWE4yagGONdE`, team "Kunal's projects") serves https://wigo-build-dashboard.vercel.app. Standard protection: the production URL opens without a login.
+- `GITHUB_TOKEN` is set (23 Nov 2026, sensitive, production and preview). `/api/register`, `/api/commits` and `/api/tests` read live from GitHub. The owner will rotate it to a fine-grained read-only token later.
+- `WIGOAPP_TOKEN` is not set, so `/api/app` (Shiva's WIGOAPP) shows the saved copy. It needs a token that can read `Shivadevdayone/WIGOAPP`.
+- Git is still linked to `latent-0/wigo-master-dash`. The Vercel login's GitHub connection only covers `latent-0`, so Vercel cannot see `kunalachintya-dayone` repos even with the Vercel app installed there. Fix in Vercel: Account Settings, Authentication, connect GitHub as `kunalachintya-dayone` (or Project, Settings, Git, Connect, Add GitHub account), then link `kunalachintya-dayone/wigo-master-dash` with production branch `claude/wizardly-goldberg-c1gcb7`.
+- Until then, production is updated by a direct file deploy of the default branch head (the Vercel REST API with the project id above).
