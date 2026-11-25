@@ -1,7 +1,7 @@
 {
   "meta": {
     "project": "WIGO admin console",
-    "updated_at": "2026-11-23T13:00:00+05:30",
+    "updated_at": "2026-11-25T11:00:00+05:30",
     "updated_by": "Kunal",
     "register": "docs/FOLLOWUPS_AND_DEPENDENCIES.md and docs/ADMIN_MILESTONES.md, wigo-admin branch admin-design",
     "register_as_of": "2026-11-23",
@@ -874,18 +874,6 @@
           "asked_on": "2026-10-12",
           "received_on": "2026-11-20",
           "note": "Arrived Thursday night (20 Nov, 3:30 am IST). Reviewed; our review and clarification document goes to n1co on 23 or 24 Nov. Assumed to be the payment API docs first asked for on 12 Oct."
-        },
-        {
-          "title": "Sandbox credentials",
-          "asked_on": "2026-10-12",
-          "received_on": null,
-          "note": "First requested in HANDOFF_RESPONSE.md (12 Oct)."
-        },
-        {
-          "title": "Webhooks: event list, signing secret and endpoint registration",
-          "asked_on": "2026-10-12",
-          "received_on": null,
-          "note": "Covers chargeback events and the top-up attempt feed. Confirm the date."
         },
         {
           "title": "Reply to our financing screens response (NC-01 to NC-18)",

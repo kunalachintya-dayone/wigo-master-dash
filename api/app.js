@@ -9,7 +9,9 @@
 //
 // Responses are cached at the edge for 5 minutes.
 
-import { parseReadme, recentCommits } from '../lib/app.js';
+import { parseReadme, recentCommits, mergeBranchCommits } from '../lib/app.js';
+
+const MAX_BRANCHES = 10;
 
 const DEFAULT_SOURCE = { repo: 'Shivadevdayone/WIGOAPP', branch: 'main', file: 'README.md' };
 
@@ -50,13 +52,29 @@ export default async function handler(req, res) {
     const head = await getJson(`https://api.github.com/repos/${src.repo}/commits/${encodeURIComponent(src.branch)}`, token);
     const sha = head.sha;
     const fileUrl = `https://api.github.com/repos/${src.repo}/contents/${encodeURI(src.file)}?ref=${sha}`;
-    const [fileRes, history] = await Promise.all([
+    const [fileRes, history, branches] = await Promise.all([
       fetch(fileUrl, { headers: ghHeaders(token, true) }),
       getJson(`https://api.github.com/repos/${src.repo}/commits?sha=${sha}&per_page=30`, token),
+      getJson(`https://api.github.com/repos/${src.repo}/branches?per_page=100`, token).catch(() => []),
     ]);
     if (!fileRes.ok) throw new Error(`${src.file}: GitHub answered ${fileRes.status}`);
     const { units, open } = parseReadme(await fileRes.text());
     if (!units.length) throw new Error('The README had no workflow counts or adapter table');
+    // Work often lands on feature branches before it reaches the main branch, so recent commits and
+    // "last updated" come from every branch, while the build status stays the main branch's README.
+    const others = (Array.isArray(branches) ? branches : []).map((b) => b.name).filter((n) => n && n !== src.branch).slice(0, MAX_BRANCHES);
+    const otherLists = await Promise.all(
+      others.map((name) =>
+        getJson(`https://api.github.com/repos/${src.repo}/commits?sha=${encodeURIComponent(name)}&per_page=30`, token)
+          .then((commits) => ({ branch: name, commits }))
+          .catch(() => ({ branch: name, commits: [] }))
+      )
+    );
+    const merged = mergeBranchCommits([{ branch: src.branch, commits: history }, ...otherLists]);
+    const newest = merged[0] || null;
+    const latest = newest
+      ? { branch: newest.branch, sha: newest.sha, short: newest.sha.slice(0, 7), url: newest.html_url, date: (newest.commit.committer && newest.commit.committer.date) || newest.commit.author.date }
+      : null;
     res.status(200).json({
       configured: true,
       source: {
@@ -68,10 +86,12 @@ export default async function handler(req, res) {
         url: head.html_url,
         date: head.commit && head.commit.committer && head.commit.committer.date,
       },
+      latest,
+      branches: [src.branch, ...others],
       fetched_at: new Date().toISOString(),
       units,
       open,
-      recent: recentCommits(history),
+      recent: recentCommits(merged),
     });
   } catch (err) {
     res.setHeader('cache-control', 'no-store');

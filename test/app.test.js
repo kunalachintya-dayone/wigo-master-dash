@@ -163,3 +163,14 @@ test('tokenFor sends Shiva\'s repos to WIGOAPP_TOKEN and everything else to GITH
   assert.equal(tokenFor('kunalachintya-dayone/wigo-admin', env), 'k');
   assert.equal(tokenFor('Shivadevdayone/WIGOAPP', { GITHUB_TOKEN: 'k' }), undefined);
 });
+
+test('commits from every branch merge newest first, shared history stays on main', async () => {
+  const { mergeBranchCommits, recentCommits } = await import('../lib/app.js');
+  const c = (sha, date) => ({ sha, html_url: `https://x/${sha}`, commit: { message: sha, author: { date }, committer: { date } } });
+  const merged = mergeBranchCommits([
+    { branch: 'main', commits: [c('a1', '2026-11-23T07:00:00Z'), c('a0', '2026-11-20T07:00:00Z')] },
+    { branch: 'feature/x', commits: [c('b1', '2026-11-24T09:00:00Z'), c('a1', '2026-11-23T07:00:00Z')] },
+  ]);
+  assert.deepEqual(merged.map((m) => [m.sha, m.branch]), [['b1', 'feature/x'], ['a1', 'main'], ['a0', 'main']]);
+  assert.equal(recentCommits(merged)[0].branch, 'feature/x');
+});

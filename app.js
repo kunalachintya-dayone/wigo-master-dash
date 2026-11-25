@@ -156,7 +156,11 @@ function renderAppLine() {
   if (live && live.configured === false) return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy of Shiva's progress.</b> WIGOAPP is private and <code>WIGOAPP_TOKEN</code> is not set on the Vercel project yet.</span></div>`;
   if (live && live.source && !live.error) {
     const s = live.source;
-    return `<div class="banner ok"><span>●</span><span><b>Live from WIGOAPP.</b> Shiva's progress is read from <code>${esc(s.repo)}</code> branch <code>${esc(s.branch)}</code> at <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.short)}</a> (${esc(fmtStamp(s.date))}): the build status in <code>${esc(s.file)}</code> and the latest commits.</span></div>`;
+    const l = live.latest;
+    const latestLine = l && l.sha !== s.sha
+      ? ` Latest work: branch <code>${esc(l.branch)}</code> at <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.short)}</a> (${esc(fmtStamp(l.date))}), not yet merged into <code>${esc(s.branch)}</code>.`
+      : '';
+    return `<div class="banner ok"><span>●</span><span><b>Live from WIGOAPP.</b> Last update ${esc(fmtStamp((l && l.date) || s.date))}. Build status is read from <code>${esc(s.file)}</code> on <code>${esc(s.repo)}</code> branch <code>${esc(s.branch)}</code> at <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.short)}</a> (${esc(fmtStamp(s.date))}); latest commits come from every branch.${latestLine}</span></div>`;
   }
   const why = !live ? 'could not be reached' : `failed: ${live.error}`;
   return `<div class="banner warn"><span>⚠</span><span><b>Showing the saved copy of Shiva's progress.</b> The live read of WIGOAPP ${esc(why)}, so the rider app numbers come from data.json.</span></div>`;
@@ -225,7 +229,7 @@ function renderShiva(v) {
   const open = a.open.length ? `<ol class="releases">${a.open.map((o) => `<li>${esc(o)}</li>`).join('')}</ol>` : `<div class="chart-note">Nothing listed as open.</div>`;
   const recent = a.recent.length
     ? `<ul class="releases">${a.recent
-        .map((c) => `<li>${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${esc(c.subject)}</a>` : esc(c.subject)} <span class="muted">${esc(c.short)} · ${esc(fmtStamp(c.date))}</span></li>`)
+        .map((c) => `<li>${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">${esc(c.subject)}</a>` : esc(c.subject)} <span class="muted">${esc(c.short)} · ${esc(fmtStamp(c.date))}${c.branch && c.branch !== 'main' ? ` · ${esc(c.branch)}` : ''}</span></li>`)
         .join('')}</ul>`
     : `<div class="chart-note">Latest commits appear here once WIGOAPP has been read live.</div>`;
   const note = a.live ? 'Read live from the WIGOAPP README. Evidence links to the README at that commit.' : a.note;
